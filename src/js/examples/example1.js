@@ -7,9 +7,9 @@ export function initialize(Observable = ObservableClass, scheduler = undefined) 
             .fromEvent(document.querySelector('.button1'), 'click')
             .delay(1000, scheduler);
 
-    buttonClicked.subscribe(() => {
+    const subscriber = buttonClicked.subscribe(() => {
         fillElementWithRandomColor(1, 'rectangle1');
     });
 
-    return buttonClicked;
+    return [ buttonClicked, subscriber ];
 }

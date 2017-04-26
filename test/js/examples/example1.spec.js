@@ -2,7 +2,7 @@ import { expect } from 'chai';
 import sinon from 'sinon';
 import * as example1 from '../../../src/js/examples/example1';
 import { JSDOM } from 'jsdom';
-import { TestScheduler, VirtualTimeScheduler, VirtualAction, Observable } from 'rxjs';
+import { VirtualTimeScheduler, Subscriber, Observable } from 'rxjs';
 
 describe('Example 1', () => {
     describe('initialize function', () => {
@@ -20,21 +20,23 @@ describe('Example 1', () => {
         });
 
         describe('return', () => {
-            it('should return an Observable', () => {
-                const buttonClicked = example1.initialize();
-                expect(buttonClicked).to.be.an.instanceOf(Observable);
+            it('should return an Observable and a Subscriber', () => {
+                const [ buttonClickedObservable, subscriber ] = example1.initialize();
+
+                expect(buttonClickedObservable).to.be.an.instanceOf(Observable);
+                expect(subscriber).to.be.an.instanceOf(Subscriber);
             });
         });
 
         describe('stream configuration', () => {
-            let delaySpy;
+            let delayStub;
             let subscribeSpy;
 
             beforeEach(() => {
                 subscribeSpy = sinon.spy();
-                delaySpy = sinon.stub().withArgs(1000).returns({ subscribe: subscribeSpy });
+                delayStub = sinon.stub().withArgs(1000).returns({ subscribe: subscribeSpy });
 
-                sinon.stub(Observable, 'fromEvent').returns({ delay: delaySpy });
+                sinon.stub(Observable, 'fromEvent').returns({ delay: delayStub });
             });
 
             afterEach(() => {
@@ -42,31 +44,33 @@ describe('Example 1', () => {
             });
 
             it('should call fromEvent', () => {
-                const buttonClicked = example1.initialize(Observable);
+                example1.initialize(Observable);
                 expect(Observable.fromEvent.calledOnce).to.be.true;
             });
 
             it('should call delay with 1000 ms', () => {
-                const buttonClicked = example1.initialize(Observable);
-                expect(delaySpy.calledOnce).to.be.true;
+                example1.initialize(Observable);
+                expect(delayStub.calledOnce).to.be.true;
             });
 
             it('should call subscribe', () => {
-                const buttonClicked = example1.initialize(Observable);
+                example1.initialize(Observable);
                 expect(subscribeSpy.calledOnce).to.be.true;
             });
         });
 
         describe('result', () => {
-            it('should set background of .rectangle1 with a rgb value after 1 second of clicking button', () => {
-                const scheduler = new VirtualTimeScheduler(VirtualAction, 1000);
-                const buttonClicked = example1.initialize(Observable, scheduler);
+            it('should set background of .rectangle1 with a random rgb value after 1 second of clicking button', () => {
+                const scheduler = new VirtualTimeScheduler(undefined, 1000);
                 const rectangleElement = document.querySelector('.example1 .rectangle1');
+
+                example1.initialize(Observable, scheduler);
 
                 document.querySelector('.button1').dispatchEvent(new window.Event('click'));
                 expect(rectangleElement.style.background).to.be.empty;
 
                 scheduler.flush();
+
                 expect(rectangleElement.style.background).to.contain('rgb');
             });
         });

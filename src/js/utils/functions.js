@@ -4,6 +4,10 @@ function getRandomRGBValue() {
 }
 
 export function fillElementWithRandomColor(exampleNumber, elementClass) {
+    if (!document) {
+        return;
+    }
+    
     const element = document
         .querySelectorAll(`.example${exampleNumber} .${elementClass}`)
         .item(0);
