@@ -39,3 +39,20 @@ export function writeArrayInElement(array, exampleNumber, elementClass) {
         element.innerHTML = array.join(' ');
     }
 }
+
+export function increaseCounter(accumulator) {
+    return accumulator + 1;
+}
+
+export function writeTextInElement(text, exampleNumber, elementClass) {
+    if (!document) {
+        return;
+    }
+
+    const element = document
+        .querySelector(`.example${exampleNumber} .${elementClass}`);
+
+    if (element){
+        element.innerHTML = text;
+    }
+}
