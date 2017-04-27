@@ -1,15 +1,15 @@
 import { expect } from 'chai';
 import sinon from 'sinon';
-import * as example2 from '../../../src/js/examples/example2';
+import * as example3 from '../../../src/js/examples/example3';
 import { JSDOM } from 'jsdom';
 import { VirtualTimeScheduler, Observable, Subscriber } from 'rxjs';
 
-describe('Example 2', () => {
+describe('Example 3', () => {
     describe('initialize function', () => {
         let window;
 
         beforeEach(() => {
-            window = new JSDOM('<div class="example2"><div class="rectangle1"></div></div>').window;
+            window = new JSDOM('<div class="example3"><div class="text"></div></div>').window;
             global.window =  window;
             global.document = window.document;
         });
@@ -21,7 +21,7 @@ describe('Example 2', () => {
 
         describe('return', () => {
             it('should return an Observable and a Subscriber', () => {
-                const [ everyTwoSeconds, subscriber ] = example2.initialize();
+                const [ everyTwoSeconds, subscriber ] = example3.initialize();
 
                 expect(everyTwoSeconds).to.be.an.instanceOf(Observable);
                 expect(subscriber).to.be.an.instanceOf(Subscriber);
@@ -31,16 +31,20 @@ describe('Example 2', () => {
         describe('stream configuration', () => {
             let subscribeSpy;
             let takeStub;
+            let scanStub;
 
             beforeEach(() => {
                 subscribeSpy = sinon.spy();
                 takeStub = sinon.stub()
-                    .withArgs(5)
+                    .withArgs(10)
                     .returns({ subscribe: subscribeSpy });
 
-                sinon.stub(Observable, 'interval')
-                    .withArgs(2000)
+                scanStub = sinon.stub()
                     .returns({ take: takeStub });
+
+                sinon.stub(Observable, 'interval')
+                    .withArgs(1000)
+                    .returns({ scan: scanStub });
             });
 
             afterEach(() => {
@@ -48,35 +52,41 @@ describe('Example 2', () => {
             });
 
             it('should call interval', () => {
-                example2.initialize(Observable);
+                example3.initialize(Observable);
                 expect(Observable.interval.calledOnce).equal(true);
             });
 
+            it('should call scan', () => {
+                example3.initialize(Observable);
+                expect(scanStub.calledOnce).equal(true);
+            });
+
             it('should call take', () => {
-                example2.initialize(Observable);
+                example3.initialize(Observable);
                 expect(takeStub.calledOnce).equal(true);
             });
 
             it('should call subscribe', () => {
-                example2.initialize(Observable);
+                example3.initialize(Observable);
                 expect(subscribeSpy.calledOnce).equal(true);
             });
         });
 
         describe('result', () => {
-            it('should set background of .rectangle1 with a random rgb value in 2 seconds intervals', () => {
+            it('should write the 12 first fibonacci values after 10 seconds', () => {
                 const scheduler = new VirtualTimeScheduler(undefined, 10000);
-                const [ everyTwoSeconds, subscriber ] = example2.initialize(Observable, scheduler);
-                const rectangleElement = document.querySelector('.example2 .rectangle1');
+                const [ fibonacciObservable, subscriber ] = example3.initialize(Observable, scheduler);
+                const textElement = document.querySelector('.example3 .text');
                 const subscriberSpy = sinon.spy();
+                const fibonacciValues = '0 1 1 2 3 5 8 13 21 34 55 89';
 
-                const subscriberForCounting = everyTwoSeconds.subscribe(subscriberSpy);
+                const subscriberForCounting = fibonacciObservable.subscribe(subscriberSpy);
 
-                expect(rectangleElement.style.background).equal('');
+                expect(textElement.innerHTML).equal('');
                 scheduler.flush();
 
-                expect(subscriberSpy.callCount).to.equal(5);
-                expect(rectangleElement.style.background).to.contain('rgb');
+                expect(subscriberSpy.callCount).to.equal(10);
+                expect(textElement.innerHTML).to.equal(fibonacciValues);
 
                 subscriber.unsubscribe();
                 subscriberForCounting.unsubscribe();

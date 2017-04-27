@@ -45,17 +45,17 @@ describe('Example 1', () => {
 
             it('should call fromEvent', () => {
                 example1.initialize(Observable);
-                expect(Observable.fromEvent.calledOnce).to.be.true;
+                expect(Observable.fromEvent.calledOnce).equal(true);
             });
 
             it('should call delay with 1000 ms', () => {
                 example1.initialize(Observable);
-                expect(delayStub.calledOnce).to.be.true;
+                expect(delayStub.calledOnce).equal(true);
             });
 
             it('should call subscribe', () => {
                 example1.initialize(Observable);
-                expect(subscribeSpy.calledOnce).to.be.true;
+                expect(subscribeSpy.calledOnce).equal(true);
             });
         });
 
@@ -67,7 +67,7 @@ describe('Example 1', () => {
                 example1.initialize(Observable, scheduler);
 
                 document.querySelector('.button1').dispatchEvent(new window.Event('click'));
-                expect(rectangleElement.style.background).to.be.empty;
+                expect(rectangleElement.style.background).equal('');
 
                 scheduler.flush();
 
