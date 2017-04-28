@@ -23,8 +23,8 @@ describe('Example 5', () => {
             it('should return an Observable and a Subscriber', () => {
                 const [ customObservable, subscriber ] = example5.initialize();
 
-                expect(customObservable).to.be.an.instanceOf(Observable);
-                expect(subscriber).to.be.an.instanceOf(Subscriber);
+                expect(customObservable, 'Observable not returned').to.be.an.instanceOf(Observable);
+                expect(subscriber, 'Subscriber not returned').to.be.an.instanceOf(Subscriber);
             });
         });
 

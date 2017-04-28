@@ -23,8 +23,8 @@ describe('Example 2', () => {
             it('should return an Observable and a Subscriber', () => {
                 const [ everyTwoSeconds, subscriber ] = example2.initialize();
 
-                expect(everyTwoSeconds).to.be.an.instanceOf(Observable);
-                expect(subscriber).to.be.an.instanceOf(Subscriber);
+                expect(everyTwoSeconds, 'Observable not returned').to.be.an.instanceOf(Observable);
+                expect(subscriber, 'Subscriber not returned').to.be.an.instanceOf(Subscriber);
             });
         });
 
@@ -49,17 +49,34 @@ describe('Example 2', () => {
 
             it('should call interval', () => {
                 example2.initialize(Observable);
-                expect(Observable.interval.calledOnce).equal(true);
+                expect(Observable.interval.calledOnce, 'interval with argument 2000 not called').equal(true);
             });
 
             it('should call take', () => {
                 example2.initialize(Observable);
-                expect(takeStub.calledOnce).equal(true);
+                expect(takeStub.calledOnce, 'take with argument 5 not called').equal(true);
             });
 
             it('should call subscribe', () => {
                 example2.initialize(Observable);
-                expect(subscribeSpy.calledOnce).equal(true);
+                expect(subscribeSpy.calledOnce, 'subscribe not called').equal(true);
+            });
+        });
+
+        describe('observable behaviour', () => {
+            it('should emit a value every 2 seconds until it have emitted 5 times', () => {
+                const scheduler = new VirtualTimeScheduler(undefined, 10000);
+                const [ everyTwoSeconds, subscriber ] = example2.initialize(Observable, scheduler);
+                const subscriberCallbackSpy = sinon.spy();
+
+                const subscriberForCounting = everyTwoSeconds.subscribe(subscriberCallbackSpy);
+
+                scheduler.flush();
+
+                expect(subscriberCallbackSpy.callCount, 'observable not emitted 5 times').to.equal(5);
+
+                subscriber.unsubscribe();
+                subscriberForCounting.unsubscribe();
             });
         });
 
@@ -70,16 +87,12 @@ describe('Example 2', () => {
                 const rectangleElement = document.querySelector('.example2 .rectangle1');
                 const subscriberSpy = sinon.spy();
 
-                const subscriberForCounting = everyTwoSeconds.subscribe(subscriberSpy);
-
-                expect(rectangleElement.style.background).equal('');
+                expect(rectangleElement.style.background, 'background not empty at the beginning').equal('');
                 scheduler.flush();
 
-                expect(subscriberSpy.callCount).to.equal(5);
-                expect(rectangleElement.style.background).to.contain('rgb');
+                expect(rectangleElement.style.background, 'background not contained rgb value').to.contain('rgb');
 
                 subscriber.unsubscribe();
-                subscriberForCounting.unsubscribe();
             });
         });
     });
