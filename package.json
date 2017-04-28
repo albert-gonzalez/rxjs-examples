@@ -6,7 +6,8 @@
   "scripts": {
     "build": "webpack",
     "start": "webpack-dev-server",
-    "test": "mocha --watch --require babel-register 'test/**/*.spec.js'"
+    "test": "mocha --watch --require babel-register 'test/**/*.spec.js'",
+    "test-custom": "mocha --watch --require babel-register"
   },
   "keywords": [
     "rxjs",
