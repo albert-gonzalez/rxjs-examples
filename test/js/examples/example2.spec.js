@@ -63,7 +63,7 @@ describe('Example 2', () => {
             });
         });
 
-        describe('result', () => {
+        describe('subscriber behaviour', () => {
             it('should set background of .rectangle1 with a random rgb value in 2 seconds intervals', () => {
                 const scheduler = new VirtualTimeScheduler(undefined, 10000);
                 const [ everyTwoSeconds, subscriber ] = example2.initialize(Observable, scheduler);

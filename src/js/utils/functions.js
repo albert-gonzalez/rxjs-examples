@@ -56,3 +56,12 @@ export function writeTextInElement(text, exampleNumber, elementClass) {
         element.innerHTML = text;
     }
 }
+
+export function addChangeEventListenerToElement(exampleNumber, elementClass, callback) {
+    document.querySelector('.example5 .input1')
+        .addEventListener('change', callback);
+}
+
+export function getElementValueFromEvent(event) {
+    return event.currentTarget.value;
+}

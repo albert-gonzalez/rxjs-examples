@@ -72,7 +72,7 @@ describe('Example 3', () => {
             });
         });
 
-        describe('result', () => {
+        describe('subscriber behaviour', () => {
             it('should write the 12 first fibonacci values after 10 seconds', () => {
                 const scheduler = new VirtualTimeScheduler(undefined, 10000);
                 const [ fibonacciObservable, subscriber ] = example3.initialize(Observable, scheduler);

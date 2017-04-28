@@ -69,7 +69,7 @@ describe('Example 4', () => {
             });
         });
 
-        describe('result', () => {
+        describe('subscriber behaviour', () => {
             it('should increment counter by 1 when the three buttons are clicked', () => {
                 const textElement = document.querySelector('.example4 .text');
 

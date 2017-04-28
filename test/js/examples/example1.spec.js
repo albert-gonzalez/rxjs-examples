@@ -59,7 +59,7 @@ describe('Example 1', () => {
             });
         });
 
-        describe('result', () => {
+        describe('subscriber behaviour', () => {
             it('should set background of .rectangle1 with a random rgb value after 1 second of clicking button', () => {
                 const scheduler = new VirtualTimeScheduler(undefined, 1000);
                 const rectangleElement = document.querySelector('.example1 .rectangle1');
