@@ -4,7 +4,7 @@
   "description": "RxJS Examples",
   "main": "index.js",
   "scripts": {
-    "build": "webpack",
+    "build": "webpack --optimize-minimize",
     "start": "webpack-dev-server",
     "test": "mocha --watch --require babel-register 'test/**/*.spec.js'",
     "test-custom": "mocha --watch --require babel-register"
