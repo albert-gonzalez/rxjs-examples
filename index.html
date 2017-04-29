@@ -18,7 +18,7 @@
 
                     <div class="example1 example">
                         <h2 class="title is-3">Example 1</h2>
-                        <h3 class="subtitle is-4">Delay click 1 second and fill the rectangle with a random color</h3>
+                        <h3 class="subtitle is-4">Observable that emits after 1 second than a button has been clicked. A subscriber fill the rectangle with a random color when the observable emits.</h3>
                         <hr>
                         <div class="content">
                             <h4 class="subtitle is-5">Documentation</h4>
@@ -53,7 +53,7 @@
                                             Result
                                         </p>
                                     </header>
-                                    <div class="card-content">
+                                    <div class="card-content height-100">
                                         <div class="rectangle rectangle1"></div>
                                     </div>
                                 </div>
@@ -65,12 +65,12 @@
 
                     <div class="example2 example">
                         <h2 class="title is-3">Example 2</h2>
-                        <h3 class="subtitle is-4">Fill the rectangle with a random color 5 times in 2 second intervals</h3>
+                        <h3 class="subtitle is-4">Observable emits every second during 5 seconds. A subscriber fill the rectangle with a random color when the observable emits.</h3>
                         <hr>
                         <div class="content">
                             <h4 class="subtitle is-5">Documentation</h4>
                             <ul>
-                                <li><a href="https://github.com/ReactiveX/rxjs/blob/master/doc/observable.md">Observable Documentation</a></li>                                
+                                <li><a href="https://github.com/ReactiveX/rxjs/blob/master/doc/observable.md">Observable Documentation</a></li>
                                 <li><a href="http://reactivex.io/rxjs/class/es6/Observable.js~Observable.html#static-method-interval">Observable timer Documentation</a></li>
                                 <li><a href="http://reactivex.io/rxjs/class/es6/Observable.js~Observable.html#instance-method-take">Observable take Documentation</a></li>
                             </ul>
@@ -88,7 +88,7 @@
                                             Result
                                         </p>
                                     </header>
-                                    <div class="card-content">
+                                    <div class="card-content height-100">
                                         <div class="rectangle rectangle1"></div>
                                     </div>
                                 </div>
@@ -100,12 +100,12 @@
 
                     <div class="example3 example">
                         <h2 class="title is-3">Example 3</h2>
-                        <h3 class="subtitle is-4">Calculate the 12 first values of Fibonacci and write them in the result box in 1 second intervals</h3>
+                        <h3 class="subtitle is-4">Observable that calculates and emits an array with values of Fibonacci each second during 10 seconds. A subscriber write them in the result box.</h3>
                         <hr>
                         <div class="content">
                             <h4 class="subtitle is-5">Documentation</h4>
                             <ul>
-                                <li><a href="https://github.com/ReactiveX/rxjs/blob/master/doc/observable.md">Observable Documentation</a></li>                                
+                                <li><a href="https://github.com/ReactiveX/rxjs/blob/master/doc/observable.md">Observable Documentation</a></li>
                                 <li><a href="http://reactivex.io/rxjs/class/es6/Observable.js~Observable.html#static-method-interval">Observable timer Documentation</a></li>
                                 <li><a href="http://reactivex.io/rxjs/class/es6/Observable.js~Observable.html#instance-method-scan">Observable scan Documentation</a></li>
                                 <li><a href="http://reactivex.io/rxjs/class/es6/Observable.js~Observable.html#instance-method-take">Observable take Documentation</a></li>
@@ -135,15 +135,15 @@
 
                     <div class="example4 example">
                         <h2 class="title is-3">Example 4</h2>
-                        <h3 class="subtitle is-4">Click every button for incrementing the counter</h3>
+                        <h3 class="subtitle is-4">Observable that emits a value when every button has been clicked. It accumulates a count. A subscriber write this count in a box.</h3>
                         <hr>
                         <div class="content">
                             <h4 class="subtitle is-5">Documentation</h4>
                             <ul>
-                                <li><a href="https://github.com/ReactiveX/rxjs/blob/master/doc/observable.md">Observable Documentation</a></li>                                
+                                <li><a href="https://github.com/ReactiveX/rxjs/blob/master/doc/observable.md">Observable Documentation</a></li>
                                 <li><a href="http://reactivex.io/rxjs/class/es6/Observable.js~Observable.html#static-method-fromEvent">Observable FromEvent Documentation</a></li>
                                 <li><a href="http://reactivex.io/rxjs/class/es6/Observable.js~Observable.html#static-method-zip">Observable zip Documentation</a></li>
-                                <li><a href="http://reactivex.io/rxjs/class/es6/Observable.js~Observable.html#instance-method-scan">Observable scan Documentation</a></li>                                
+                                <li><a href="http://reactivex.io/rxjs/class/es6/Observable.js~Observable.html#instance-method-scan">Observable scan Documentation</a></li>
                             </ul>
                             <h4 class="subtitle is-5">Source example</h4>
                             <ul>
@@ -160,9 +160,17 @@
                                         </p>
                                     </header>
                                     <div class="card-content has-text-centered">
-                                        <button class="button button1">Click me!</button>
-                                        <button class="button button2">Click me!</button>
-                                        <button class="button button3">Click me!</button>
+                                        <div class="columns">
+                                            <div class="column">
+                                                <button class="button button1">Click me!</button>
+                                            </div>
+                                            <div class="column">
+                                                <button class="button button2">Click me!</button>
+                                            </div>
+                                            <div class="column">
+                                                <button class="button button3">Click me!</button>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -185,12 +193,12 @@
 
                     <div class="example5 example">
                         <h2 class="title is-3">Example 5</h2>
-                        <h3 class="subtitle is-4">Create an Observable that emits the number written in the input box when this changes. Observable should double this value using map. It will finish with an error if the value is not a number and complete if the value is equals to END</h3>
+                        <h3 class="subtitle is-4">Create an Observable that emits the number written in the input box when this changes. Observable should double this value using map. It will finish with an error if the value is not a number and complete if the value is equals to END. A subscriber writes in a box the emitted values, the error and when the observable is completed.</h3>
                         <hr>
                         <div class="content">
                             <h4 class="subtitle is-5">Documentation</h4>
                             <ul>
-                                <li><a href="https://github.com/ReactiveX/rxjs/blob/master/doc/observable.md">Observable Documentation</a></li>                                
+                                <li><a href="https://github.com/ReactiveX/rxjs/blob/master/doc/observable.md">Observable Documentation</a></li>
                                 <li><a href="http://reactivex.io/rxjs/class/es6/Observable.js~Observable.html#static-method-create">Observable create Documentation</a></li>
                                 <li><a href="http://reactivex.io/rxjs/class/es6/Observable.js~Observable.html#instance-method-map">Observable map Documentation</a></li>
                             </ul>
@@ -222,6 +230,61 @@
                                     </header>
                                     <div class="card-content">
                                         <div class="text"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <hr>
+                    </div>
+
+                    <div class="example6 example">
+                        <h2 class="title is-3">Example 6</h2>
+                        <h3 class="subtitle is-4">Observable that emits events from input keyup. It debounce the events 500 ms, map the event to the input value and filter only the values with length greater than 3. A Subject is subscribed to the Observable, and this Subject emits the value of the input when the button is clicked. A subscriber does an AJAX call with the emitted values.</h3>
+                        <hr>
+                        <div class="content">
+                            <h4 class="subtitle is-5">Documentation</h4>
+                            <ul>
+                                <li><a href="https://github.com/ReactiveX/rxjs/blob/master/doc/observable.md">Observable Documentation</a></li>
+                                <li><a href="https://github.com/ReactiveX/rxjs/blob/master/doc/subject.md">Subject Documentation</a></li>
+                                <li><a href="http://reactivex.io/rxjs/class/es6/Observable.js~Observable.html#static-method-fromEvent">Observable fromEvent Documentation</a></li>
+                                <li><a href="http://reactivex.io/rxjs/class/es6/Observable.js~Observable.html#instance-method-map">Observable map Documentation</a></li>
+                                <li><a href="http://reactivex.io/rxjs/class/es6/Observable.js~Observable.html#instance-method-filter">Observable filter Documentation</a></li>
+                            </ul>
+                            <h4 class="subtitle is-5">Source example</h4>
+                            <ul>
+                                <li><a href="./js/src/example6.js">example6.js</a>
+                            </ul>
+                        </div>
+                        <hr>
+                        <div class="columns">
+                            <div class="column">
+                                <div class="card">
+                                    <header class="card-header">
+                                        <p class="card-header-title">
+                                            Input
+                                        </p>
+                                    </header>
+                                    <div class="card-content">
+                                        <div class="columns">
+                                            <div class="column is-three-quarters">
+                                                <input placeholder="Search species" class="input input1" />
+                                            </div>
+                                            <div class="column">
+                                                <button class="button button1 is-fullwidth">Send</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="column result">
+                                <div class="card">
+                                    <header class="card-header">
+                                        <p class="card-header-title">
+                                            Result
+                                        </p>
+                                    </header>
+                                    <div class="card-content content">
+                                        <ul class="text"></ul>
                                     </div>
                                 </div>
                             </div>

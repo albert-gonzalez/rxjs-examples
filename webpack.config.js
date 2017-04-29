@@ -39,5 +39,6 @@ module.exports = {
         publicPath: '/dist/',
         compress: true,
         port: 9000
-    }
+    },
+    devtool: 'source-map'
 };

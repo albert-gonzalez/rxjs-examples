@@ -45,17 +45,17 @@ describe('Example 5', () => {
 
             it('should call create', () => {
                 example5.initialize(Observable);
-                expect(Observable.create.calledOnce).equal(true);
+                expect(Observable.create.calledOnce, 'create not called').equal(true);
             });
 
             it('should call map', () => {
                 example5.initialize(Observable);
-                expect(mapStub.calledOnce).equal(true);
+                expect(mapStub.calledOnce, 'map not called').equal(true);
             });
 
             it('should call subscribe', () => {
                 example5.initialize(Observable);
-                expect(subscribeSpy.calledOnce).equal(true);
+                expect(subscribeSpy.calledOnce, 'subscribe not called').equal(true);
             });
         });
 
@@ -74,21 +74,21 @@ describe('Example 5', () => {
             it('should emit the number written in the input box doubled when this changes', () => {
                 subscriber = initializeObservableWithSubscriber(123, subscriberCallbackSpy);
 
-                expect(subscriberCallbackSpy.calledOnce).equal(true);
-                expect(subscriberCallbackSpy.args[0][0]).equal(246);
+                expect(subscriberCallbackSpy.calledOnce, 'observable not emmited').equal(true);
+                expect(subscriberCallbackSpy.args[0][0], 'emitted value not correct').equal(246);
             });
 
             it('should fail if the value written is not a number', () => {
                 subscriber = initializeObservableWithSubscriber('Cobi', null, subscriberCallbackSpy);
 
-                expect(subscriberCallbackSpy.calledOnce).equal(true);
+                expect(subscriberCallbackSpy.calledOnce, 'observable fail not emitted').equal(true);
                 expect(subscriberCallbackSpy.args[0][0]).equal('CRITICAL ERROR: Not a number!');
             });
 
             it('should fail if the value written is not a number', () => {
                 subscriber = initializeObservableWithSubscriber('END', null, null, subscriberCallbackSpy);                
 
-                expect(subscriberCallbackSpy.calledOnce).equal(true);
+                expect(subscriberCallbackSpy.calledOnce, 'observable not completed').equal(true);
             });
         });
 
@@ -96,31 +96,31 @@ describe('Example 5', () => {
             it('should write in the result box the emitted value', () => {
                 const textElement = document.querySelector('.example5 .text');
 
-                expect(textElement.innerHTML).equal('');
+                expect(textElement.innerHTML, 'text element not empty').equal('');
 
                 initializeObservable(123);
 
-                expect(textElement.innerHTML).equal('246');
+                expect(textElement.innerHTML, 'text element content incorrect').equal('246');
             });
 
             it('should write in the result box the error message if the observable fails', () => {
                 const textElement = document.querySelector('.example5 .text');
 
-                expect(textElement.innerHTML).equal('');
+                expect(textElement.innerHTML, 'text element not empty').equal('');
 
                 initializeObservable('Cobi');
 
-                expect(textElement.innerHTML).equal('CRITICAL ERROR: Not a number!');
+                expect(textElement.innerHTML, 'text element content incorrect').equal('CRITICAL ERROR: Not a number!');
             });
 
             it('should write "COMPLETED" in the result box if the observable is completed', () => {
                 const textElement = document.querySelector('.example5 .text');
 
-                expect(textElement.innerHTML).equal('');
+                expect(textElement.innerHTML, 'text element not empty').equal('');
 
                 initializeObservable('END');
 
-                expect(textElement.innerHTML).equal('COMPLETED');
+                expect(textElement.innerHTML, 'text element not empty').equal('COMPLETED');
             });
         });
     });
