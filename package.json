@@ -7,7 +7,13 @@
     "build": "webpack --optimize-minimize",
     "start": "webpack-dev-server",
     "test": "mocha --watch --require babel-register 'test/**/*.spec.js'",
-    "test-custom": "mocha --watch --require babel-register"
+    "test-custom": "mocha --watch --require babel-register",
+    "test-e1": "mocha --watch --require babel-register 'test/**/example1.spec.js'",
+    "test-e2": "mocha --watch --require babel-register 'test/**/example2.spec.js'",
+    "test-e3": "mocha --watch --require babel-register 'test/**/example3.spec.js'",
+    "test-e4": "mocha --watch --require babel-register 'test/**/example4.spec.js'",
+    "test-e5": "mocha --watch --require babel-register 'test/**/example5.spec.js'",
+    "test-e6": "mocha --watch --require babel-register 'test/**/example6.spec.js'"
   },
   "keywords": [
     "rxjs",
