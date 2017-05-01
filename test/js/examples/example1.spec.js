@@ -19,15 +19,6 @@ describe('Example 1', () => {
             global.document = undefined;
         });
 
-        describe('return', () => {
-            it('should return an Observable and a Subscriber', () => {
-                const [ buttonClickedObservable, subscriber ] = example1.initialize();
-
-                expect(buttonClickedObservable, 'Observable not returned').to.be.an.instanceOf(Observable);
-                expect(subscriber, 'Subscriber not returned').to.be.an.instanceOf(Subscriber);
-            });
-        });
-
         describe('stream configuration', () => {
             let delayStub;
             let subscribeSpy;
@@ -56,6 +47,15 @@ describe('Example 1', () => {
             it('should call subscribe', () => {
                 example1.initialize(Observable);
                 expect(subscribeSpy.calledOnce, 'subscribe not called once').equal(true);
+            });
+        });
+
+        describe('return', () => {
+            it('should return an Observable and a Subscriber', () => {
+                const [ buttonClickedObservable, subscriber ] = example1.initialize();
+
+                expect(buttonClickedObservable, 'Observable not returned').to.be.an.instanceOf(Observable);
+                expect(subscriber, 'Subscriber not returned').to.be.an.instanceOf(Subscriber);
             });
         });
 

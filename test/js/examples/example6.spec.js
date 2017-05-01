@@ -26,16 +26,6 @@ describe('Example 6', () => {
             axios.get.restore();
         });
 
-        describe('return', () => {
-            it('should return an Observable, a Subject and a Subscriber', () => {
-                const [ customObservable, subject, subscriber ] = example6.initialize();
-
-                expect(customObservable, 'Observable not returned').to.be.an.instanceOf(Observable);
-                expect(subject, 'subject not returned').to.be.an.instanceOf(Subject);
-                expect(subscriber, 'Subscriber not returned').to.be.an.instanceOf(Subscriber);
-            });
-        });
-
         describe('observable configuration', () => {
             let debounceTimeStub;
             let mapStub;
@@ -62,7 +52,7 @@ describe('Example 6', () => {
 
             it('should call debounceTime with argument 500', () => {
                 example6.initialize(Observable);
-                expect(mapStub.calledOnce, 'debounceTime not called').equal(true);
+                expect(debounceTimeStub.calledOnce, 'debounceTime not called').equal(true);
             });
 
             it('should call map', () => {
@@ -102,6 +92,16 @@ describe('Example 6', () => {
             it('should call subscribe', () => {
                 example6.initialize(undefined, Subject);
                 expect(subscribeSpy.calledOnce, 'subscribe not called').equal(true);
+            });
+        });
+
+        describe('return', () => {
+            it('should return an Observable, a Subject and a Subscriber', () => {
+                const [ customObservable, subject, subscriber ] = example6.initialize();
+
+                expect(customObservable, 'Observable not returned').to.be.an.instanceOf(Observable);
+                expect(subject, 'subject not returned').to.be.an.instanceOf(Subject);
+                expect(subscriber, 'Subscriber not returned').to.be.an.instanceOf(Subscriber);
             });
         });
 
@@ -168,7 +168,27 @@ describe('Example 6', () => {
         });
 
         describe('subscriber behaviour', () => {
-            it('should make an axios get call with the emitted value and write the result in a text box', () => {
+            it('should make an axios get call with the emitted value and write the result in a text box on keyup', () => {
+                const scheduler = new VirtualTimeScheduler(undefined, 500);
+                const [ suggestObservable, subject ] = example6.initialize(undefined, undefined, scheduler);
+                const inputElement = document.querySelector('.example6 .input1');
+                const textElement = document.querySelector('.example6 .text');
+                inputElement.value = 'Dog';
+
+                expect(textElement.innerHTML, 'Text not empty before keyup').equal('');
+
+                inputElement.dispatchEvent(new window.KeyboardEvent('keyup'));
+                scheduler.flush();
+
+                expect(axios.get.called, 'Axios get method not called').equal(true);
+                expect(axios.get.args[0][0]).to.contain('q=Dog');
+
+                return axios.get.returnValues[0].then(() =>  {
+                    expect(textElement.innerHTML).equal('<li>AA (BB)</li><li>CC (DD)</li>');
+                });
+            });
+
+            it('should make an axios get call with the emitted value and write the result in a text box on click', () => {
                 const [ suggestObservable, subject ] = example6.initialize();
                 const buttonElement = document.querySelector('.example6 .button1');
                 const inputElement = document.querySelector('.example6 .input1');
@@ -179,6 +199,7 @@ describe('Example 6', () => {
 
                 buttonElement.dispatchEvent(new window.Event('click'));
 
+                expect(axios.get.called, 'Axios get method not called').equal(true);
                 expect(axios.get.args[0][0]).to.contain('q=Dog');
 
                 return axios.get.returnValues[0].then(() =>  {

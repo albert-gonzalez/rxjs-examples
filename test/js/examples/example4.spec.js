@@ -19,15 +19,6 @@ describe('Example 4', () => {
             global.document = undefined;
         });
 
-        describe('return', () => {
-            it('should return an Observable and a Subscriber', () => {
-                const [ threeButtonsClickedObservable, subscriber ] = example4.initialize();
-
-                expect(threeButtonsClickedObservable, 'Observable not returned').to.be.an.instanceOf(Observable);
-                expect(subscriber, 'Subscriber not returned').to.be.an.instanceOf(Subscriber);
-            });
-        });
-
         describe('stream configuration', () => {
             let scanStub;
             let subscribeSpy;
@@ -45,7 +36,7 @@ describe('Example 4', () => {
                 Observable.zip.restore();
             });
 
-            it('should call fromEvent', () => {
+            it('should call fromEvent for every button (three times)', () => {
                 example4.initialize(Observable);
                 expect(Observable.fromEvent.calledThrice, 'fromEvent not called three times').equal(true);
             });
@@ -66,6 +57,15 @@ describe('Example 4', () => {
             it('should call subscribe', () => {
                 example4.initialize(Observable);
                 expect(subscribeSpy.calledOnce, 'subscribe not called').equal(true);
+            });
+        });
+
+        describe('return', () => {
+            it('should return an Observable and a Subscriber', () => {
+                const [ threeButtonsClickedObservable, subscriber ] = example4.initialize();
+
+                expect(threeButtonsClickedObservable, 'Observable not returned').to.be.an.instanceOf(Observable);
+                expect(subscriber, 'Subscriber not returned').to.be.an.instanceOf(Subscriber);
             });
         });
 

@@ -19,15 +19,6 @@ describe('Example 5', () => {
             global.document = undefined;
         });
 
-        describe('return', () => {
-            it('should return an Observable and a Subscriber', () => {
-                const [ customObservable, subscriber ] = example5.initialize();
-
-                expect(customObservable, 'Observable not returned').to.be.an.instanceOf(Observable);
-                expect(subscriber, 'Subscriber not returned').to.be.an.instanceOf(Subscriber);
-            });
-        });
-
         describe('observable configuration', () => {
             let mapStub;
             let subscribeSpy;
@@ -56,6 +47,15 @@ describe('Example 5', () => {
             it('should call subscribe', () => {
                 example5.initialize(Observable);
                 expect(subscribeSpy.calledOnce, 'subscribe not called').equal(true);
+            });
+        });
+
+        describe('return', () => {
+            it('should return an Observable and a Subscriber', () => {
+                const [ customObservable, subscriber ] = example5.initialize();
+
+                expect(customObservable, 'Observable not returned').to.be.an.instanceOf(Observable);
+                expect(subscriber, 'Subscriber not returned').to.be.an.instanceOf(Subscriber);
             });
         });
 

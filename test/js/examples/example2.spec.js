@@ -19,15 +19,6 @@ describe('Example 2', () => {
             global.document = undefined;
         });
 
-        describe('return', () => {
-            it('should return an Observable and a Subscriber', () => {
-                const [ everyTwoSeconds, subscriber ] = example2.initialize();
-
-                expect(everyTwoSeconds, 'Observable not returned').to.be.an.instanceOf(Observable);
-                expect(subscriber, 'Subscriber not returned').to.be.an.instanceOf(Subscriber);
-            });
-        });
-
         describe('stream configuration', () => {
             let subscribeSpy;
             let takeStub;
@@ -40,19 +31,19 @@ describe('Example 2', () => {
 
                 sinon.stub(Observable, 'interval')
                     .withArgs(2000)
-                    .returns({ take: takeStub });
+                    .returns({ take: takeStub, subscribe: subscribeSpy });
             });
 
             afterEach(() => {
                 Observable.interval.restore();
             });
 
-            it('should call interval', () => {
+            it('should call interval with 2000 ms', () => {
                 example2.initialize(Observable);
                 expect(Observable.interval.calledOnce, 'interval with argument 2000 not called').equal(true);
             });
 
-            it('should call take', () => {
+            it('should call take with 5', () => {
                 example2.initialize(Observable);
                 expect(takeStub.calledOnce, 'take with argument 5 not called').equal(true);
             });
@@ -60,6 +51,15 @@ describe('Example 2', () => {
             it('should call subscribe', () => {
                 example2.initialize(Observable);
                 expect(subscribeSpy.calledOnce, 'subscribe not called').equal(true);
+            });
+        });
+
+        describe('return', () => {
+            it('should return an Observable and a Subscriber', () => {
+                const [ everyTwoSeconds, subscriber ] = example2.initialize();
+
+                expect(everyTwoSeconds, 'Observable not returned').to.be.an.instanceOf(Observable);
+                expect(subscriber, 'Subscriber not returned').to.be.an.instanceOf(Subscriber);
             });
         });
 

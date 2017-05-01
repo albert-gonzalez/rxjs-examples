@@ -19,15 +19,6 @@ describe('Example 3', () => {
             global.document = undefined;
         });
 
-        describe('return', () => {
-            it('should return an Observable and a Subscriber', () => {
-                const [ everyTwoSeconds, subscriber ] = example3.initialize();
-
-                expect(everyTwoSeconds, 'Observable not returned').to.be.an.instanceOf(Observable);
-                expect(subscriber, 'Subscriber not returned').to.be.an.instanceOf(Subscriber);
-            });
-        });
-
         describe('stream configuration', () => {
             let subscribeSpy;
             let takeStub;
@@ -51,7 +42,7 @@ describe('Example 3', () => {
                 Observable.interval.restore();
             });
 
-            it('should call interval', () => {
+            it('should call interval with 1000 ms', () => {
                 example3.initialize(Observable);
                 expect(Observable.interval.calledOnce, 'interval with argument 1000 not called').equal(true);
             });
@@ -61,7 +52,7 @@ describe('Example 3', () => {
                 expect(scanStub.calledOnce, 'scan not called').equal(true);
             });
 
-            it('should call take', () => {
+            it('should call take with 10', () => {
                 example3.initialize(Observable);
                 expect(takeStub.calledOnce, 'take with argument 10 not called').equal(true);
             });
@@ -69,6 +60,15 @@ describe('Example 3', () => {
             it('should call subscribe', () => {
                 example3.initialize(Observable);
                 expect(subscribeSpy.calledOnce, 'subscribe not called').equal(true);
+            });
+        });
+
+        describe('return', () => {
+            it('should return an Observable and a Subscriber', () => {
+                const [ everyTwoSeconds, subscriber ] = example3.initialize();
+
+                expect(everyTwoSeconds, 'Observable not returned').to.be.an.instanceOf(Observable);
+                expect(subscriber, 'Subscriber not returned').to.be.an.instanceOf(Subscriber);
             });
         });
 
