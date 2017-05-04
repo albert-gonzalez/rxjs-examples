@@ -1,7 +1,7 @@
 import { expect } from 'chai';
 import sinon from 'sinon';
 import * as example5 from '../../../src/js/examples/example5';
-import { JSDOM } from 'jsdom';
+import { JSDOM, VirtualConsole } from 'jsdom';
 import { VirtualTimeScheduler, Subscriber, Observable } from 'rxjs';
 
 describe('Example 5', () => {
@@ -9,7 +9,9 @@ describe('Example 5', () => {
         let window;
 
         beforeEach(() => {
-            window = new JSDOM('<div class="example5"><input class="input1"><div class="text"></div></div>').window;
+            const virtualConsole = new VirtualConsole();
+            virtualConsole.on('error', () => {});
+            window = new JSDOM('<div class="example5"><input class="input1"><div class="text"></div></div>', { virtualConsole }).window;
             global.window =  window;
             global.document = window.document;
         });
@@ -85,7 +87,7 @@ describe('Example 5', () => {
                 expect(subscriberCallbackSpy.args[0][0]).equal('CRITICAL ERROR: Not a number!');
             });
 
-            it('should fail if the value written is not a number', () => {
+            it('should complete if the value written is END', () => {
                 subscriber = initializeObservableWithSubscriber('END', null, null, subscriberCallbackSpy);                
 
                 expect(subscriberCallbackSpy.calledOnce, 'observable not completed').equal(true);
@@ -108,7 +110,7 @@ describe('Example 5', () => {
 
                 expect(textElement.innerHTML, 'text element not empty').equal('');
 
-                initializeObservable('Cobi');
+                    initializeObservable('Cobi');
 
                 expect(textElement.innerHTML, 'text element content incorrect').equal('CRITICAL ERROR: Not a number!');
             });
