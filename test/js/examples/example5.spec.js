@@ -29,7 +29,7 @@ describe('Example 5', () => {
                 subscribeSpy = sinon.spy();
                 mapStub = sinon.stub().returns({ subscribe: subscribeSpy });
 
-                sinon.stub(Observable, 'create').returns({ map: mapStub });
+                sinon.stub(Observable, 'create').returns({ map: mapStub, subscribe: subscribeSpy });
             });
 
             afterEach(() => {

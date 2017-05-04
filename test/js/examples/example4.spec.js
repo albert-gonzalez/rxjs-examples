@@ -28,7 +28,7 @@ describe('Example 4', () => {
                 scanStub = sinon.stub().returns({ subscribe: subscribeSpy });
 
                 sinon.stub(Observable, 'fromEvent');
-                sinon.stub(Observable, 'zip').returns({ scan: scanStub });
+                sinon.stub(Observable, 'zip').returns({ scan: scanStub, subscribe: subscribeSpy });
             });
 
             afterEach(() => {

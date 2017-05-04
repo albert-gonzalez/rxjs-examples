@@ -31,11 +31,14 @@ describe('Example 3', () => {
                     .returns({ subscribe: subscribeSpy });
 
                 scanStub = sinon.stub()
-                    .returns({ take: takeStub });
+                    .returns({ take: takeStub, subscribe: subscribeSpy });
+
+                takeStub = takeStub
+                    .returns({ scan: scanStub, subscribe: subscribeSpy });
 
                 sinon.stub(Observable, 'interval')
                     .withArgs(1000)
-                    .returns({ scan: scanStub });
+                    .returns({ scan: scanStub, take: takeStub, subscribe: subscribeSpy });
             });
 
             afterEach(() => {

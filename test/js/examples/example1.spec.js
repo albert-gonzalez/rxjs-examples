@@ -27,7 +27,7 @@ describe('Example 1', () => {
                 subscribeSpy = sinon.spy();
                 delayStub = sinon.stub().withArgs(1000).returns({ subscribe: subscribeSpy });
 
-                sinon.stub(Observable, 'fromEvent').returns({ delay: delayStub });
+                sinon.stub(Observable, 'fromEvent').returns({ delay: delayStub, subscribe: subscribeSpy });
             });
 
             afterEach(() => {

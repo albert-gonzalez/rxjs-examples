@@ -35,10 +35,12 @@ describe('Example 6', () => {
             beforeEach(() => {
                 subscribeSpy = sinon.spy();
                 filterStub = sinon.stub().returns({ subscribe: subscribeSpy });
-                mapStub = sinon.stub().returns({ filter: filterStub });
-                debounceTimeStub = sinon.stub().withArgs(500).returns({ map: mapStub });
+                mapStub = sinon.stub().returns({ filter: filterStub, subscribe: subscribeSpy });
+                debounceTimeStub = sinon.stub().withArgs(500).returns({ map: mapStub, subscribe: subscribeSpy, filter: filterStub });
+                mapStub = mapStub.returns({ filter: filterStub, debounceTime: debounceTimeStub, subscribe: subscribeSpy });
+                filterStub = filterStub.returns({ map: mapStub, debounceTime: debounceTimeStub, subscribe: subscribeSpy });
 
-                sinon.stub(Observable, 'fromEvent').returns({ debounceTime: debounceTimeStub });
+                sinon.stub(Observable, 'fromEvent').returns({ debounceTime: debounceTimeStub, subscribe: subscribeSpy, map: mapStub, filter: filterStub });
             });
 
             afterEach(() => {
