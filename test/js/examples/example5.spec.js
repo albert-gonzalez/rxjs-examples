@@ -36,19 +36,25 @@ describe('Example 5', () => {
                 Observable.create.restore();
             });
 
-            it('should call create', () => {
+            it('should call create with argument: A function that receives an observer and configures the observable. See the examples page for more info (use addChangeEventListenerToElement and getElementValueFromEvent functions)', () => {
                 example5.initialize(Observable);
                 expect(Observable.create.calledOnce, 'create not called').equal(true);
+                expect(Observable.create.args[0][0], 'First argument is not a function').to.be.a('function');
             });
 
-            it('should call map', () => {
+            it('should call map with argument: A function that receives a number and return this number multiplied by 2', () => {
                 example5.initialize(Observable);
                 expect(mapStub.calledOnce, 'map not called').equal(true);
+                expect(mapStub.args[0][0], 'First argument is not a function').to.be.a('function');
+                expect(mapStub.args[0][0](5), 'First argument: Function does not return the received number multiplied by 2').to.equal(10);
             });
 
-            it('should call subscribe', () => {
+            it('should call subscribe with three arguments: 1) A function that writes the emitted value in a text; 2) A function that writes the error in a text; 3) A function that writes END in a text when Observable is completed (use writeTextInElement function)', () => {
                 example5.initialize(Observable);
                 expect(subscribeSpy.calledOnce, 'subscribe not called').equal(true);
+                expect(subscribeSpy.args[0][0], 'First argument is not a function').to.be.a('function');
+                expect(subscribeSpy.args[0][0], 'Second argument is not a function').to.be.a('function');
+                expect(subscribeSpy.args[0][0], 'Third argument is not a function').to.be.a('function');
             });
         });
 

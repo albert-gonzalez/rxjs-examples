@@ -34,17 +34,21 @@ describe('Example 1', () => {
                 Observable.fromEvent.restore();
             });
 
-            it('should call fromEvent', () => {
+            it('should call fromEvent with arguments: a HTMLButtonElement instance and the string "click"', () => {
                 example1.initialize(Observable);
                 expect(Observable.fromEvent.calledOnce, 'fromEvent not called once').equal(true);
+                expect(Observable.fromEvent.args[0][0]).to.be.an.instanceOf(window.HTMLButtonElement, `fromEvent call: First argument is not a HTMLButtonElement instance`);
+                expect(Observable.fromEvent.args[0][0].className).to.equal(`button1`, `fromEvent call: First argument does not have the class "button1"`);
+                expect(Observable.fromEvent.args[0][1]).to.equal('click', `fromEvent call: Second argument is not "click"`);
             });
 
-            it('should call delay with 1000 ms', () => {
-                example1.initialize(Observable);
+            it('should call delay with arguments: 1000 and a scheduler instance', () => {
+                example1.initialize(Observable, new VirtualTimeScheduler());
                 expect(delayStub.calledOnce, 'delay not called once').equal(true);
+                expect(delayStub.args[0][1]).to.be.an.instanceOf(VirtualTimeScheduler);
             });
 
-            it('should call subscribe', () => {
+            it('should call subscribe with argument: A function that calls fillElementWithRandomColor function to fill the .rectangle1 element', () => {
                 example1.initialize(Observable);
                 expect(subscribeSpy.calledOnce, 'subscribe not called once').equal(true);
             });

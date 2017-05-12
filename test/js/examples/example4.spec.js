@@ -36,12 +36,16 @@ describe('Example 4', () => {
                 Observable.zip.restore();
             });
 
-            it('should call fromEvent for every button (three times)', () => {
+            it('should call fromEvent for every button (three times) with arguments: ButtonElement and "click" string (use fromEvent function)', () => {
                 example4.initialize(Observable);
                 expect(Observable.fromEvent.calledThrice, 'fromEvent not called three times').equal(true);
+
+                expectsForFromEventCall(1, 'First');
+                expectsForFromEventCall(2, 'Second');
+                expectsForFromEventCall(3, 'Third');
             });
 
-            it('should call zip passing three observables as arguments', () => {
+            it('should call zip passing three button observables as arguments', () => {
                 example4.initialize(Observable);
                 expect(Observable.zip.calledOnce, 'zip not called').equal(true);
                 expect(Observable.zip.args[0].length, 'zip not called with three arguments').equal(3);
@@ -49,14 +53,20 @@ describe('Example 4', () => {
                         .equal(true);
             });
 
-            it('should call scan', () => {
+            it('should call scan with two arguments: 1) A function that receives an an accumulator with the current count and increases it by one (use increaseCounter function); 2) The initial value 0 ', () => {
                 example4.initialize(Observable);
                 expect(scanStub.calledOnce, 'scan not called').equal(true);
+
+                expect(scanStub.args[0][0], 'First argument is not a function').to.be.a('function');
+                expect(scanStub.args[0][0](4), 'First argument: The function does not return the accumulated value increased by one').to.equal(5);
+
+                expect(scanStub.args[0][1], 'Second value is not 0').to.equal(0);
             });
 
-            it('should call subscribe', () => {
+            it('should call subscribe with argument: A function that receives a value a writes it in a text box (use writeTextInElement function)', () => {
                 example4.initialize(Observable);
                 expect(subscribeSpy.calledOnce, 'subscribe not called').equal(true);
+                expect(subscribeSpy.args[0][0], 'First argument is not a function').to.be.a('function');
             });
         });
 
@@ -127,4 +137,10 @@ describe('Example 4', () => {
             });
         });
     });
+
+    function expectsForFromEventCall(number, name) {
+        expect(Observable.fromEvent.args[number - 1][0]).to.be.an.instanceOf(window.HTMLButtonElement, `${name} fromEvent call: First argument is not a HTMLButtonElement instance`);
+        expect(Observable.fromEvent.args[number - 1][0].className).to.equal(`button${number}`, `${name} fromEvent call: First argument does not have the class "button${number}"`);
+        expect(Observable.fromEvent.args[number - 1][1]).to.equal('click', `${name} fromEvent call: Second argument is not "click"`);
+    }
 });

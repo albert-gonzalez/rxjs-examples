@@ -38,9 +38,10 @@ describe('Example 2', () => {
                 Observable.interval.restore();
             });
 
-            it('should call interval with 2000 ms', () => {
-                example2.initialize(Observable);
+            it('should call interval with arguments: 2000 and a scheduler instance', () => {
+                example2.initialize(Observable, new VirtualTimeScheduler());
                 expect(Observable.interval.calledOnce, 'interval with argument 2000 not called').equal(true);
+                expect(Observable.interval.args[0][1]).to.be.an.instanceOf(VirtualTimeScheduler);
             });
 
             it('should call take with 5', () => {
@@ -48,9 +49,10 @@ describe('Example 2', () => {
                 expect(takeStub.calledOnce, 'take with argument 5 not called').equal(true);
             });
 
-            it('should call subscribe', () => {
+            it('should call subscribe with arguments: a function that calls fillElementWithRandomColor function to fill the .rectangle1 element', () => {
                 example2.initialize(Observable);
                 expect(subscribeSpy.calledOnce, 'subscribe not called').equal(true);
+                expect(subscribeSpy.args[0][0]).to.be.a('function');
             });
         });
 

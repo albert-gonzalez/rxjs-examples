@@ -50,26 +50,56 @@ describe('Example 6', () => {
             it('should call fromEvent', () => {
                 example6.initialize(Observable);
                 expect(Observable.fromEvent.calledOnce, 'fromEvent not called').equal(true);
+                expect(Observable.fromEvent.args[0][0]).to.be.an.instanceOf(window.HTMLInputElement, `FromEvent call: First argument is not a HTMLInputElement instance`);
+                expect(Observable.fromEvent.args[0][0].className).to.equal(`input1`, `FromEvent call: First argument does not have the class "input1"`);
+                expect(Observable.fromEvent.args[0][1]).to.equal('keyup', `FromEvent call: Second argument is not "keyup"`);
             });
 
-            it('should call debounceTime with argument 500', () => {
-                example6.initialize(Observable);
+            it('should call debounceTime with arguments: 500 and scheduler instance', () => {
+                example6.initialize(Observable, undefined, new VirtualTimeScheduler());
                 expect(debounceTimeStub.calledOnce, 'debounceTime not called').equal(true);
+                expect(debounceTimeStub.args[0][0], 'First argument is not 500').equal(500);
+                expect(debounceTimeStub.args[0][1], 'Second argument is not a scheduler instance').to.be.an.instanceOf(VirtualTimeScheduler);
             });
 
-            it('should call map', () => {
+            it('should call map with argument: A function that receives an Event and returns the value from the event (use getValueFromElement function)', (done) => {
                 example6.initialize(Observable);
-                expect(mapStub.calledOnce, 'map not called').equal(true);
+
+                if (!mapStub.calledOnce) {
+                    done(expect(mapStub.calledOnce, 'map not called').equal(true));
+                }
+                if (typeof mapStub.args[0][0] !== 'function') {
+                    done(expect(mapStub.args[0][0], 'First argument is not a function').to.be.a('function'));
+                }
+
+                const inputElement = document.querySelector('.example6 .input1');
+                inputElement.value = 'Dog';
+                const eventListener = function(event) {
+                    const returnedValue = mapStub.args[0][0](event);
+                    if (returnedValue !== 'Dog') {
+                        done(new Error(`First argument: Function does not return the value from the event. Expecting Dog; Returned ${returnedValue}`));
+                    } else {
+                        done();
+                    }
+                };
+                inputElement.addEventListener('keyup', eventListener);
+                inputElement.dispatchEvent(new window.KeyboardEvent('keyup'));
+                inputElement.removeEventListener('keyup', eventListener);
             });
 
-            it('should call filter', () => {
+            it('should call filter with arguments: Function that receives a string and returns true if the lenght of the string is > 2', () => {
                 example6.initialize(Observable);
                 expect(filterStub.calledOnce, 'filter not called').equal(true);
+                expect(filterStub.args[0][0], 'First argument is not a function').to.be.a('function');
+                expect(filterStub.args[0][0]('ME'), 'First argument does not return false if the length of the received string is less than 3').to.equal(false);
+                expect(filterStub.args[0][0](''), 'First argument does not return false if the length of the received string is 0').to.equal(false);
+                expect(filterStub.args[0][0]('Dog'), 'First argument does not return true if the length of the received string is greater than 2').to.equal(true);
             });
 
-            it('should call subscribe', () => {
+            it('should call subscribe with argument: A Subject instance', () => {
                 example6.initialize(Observable);
                 expect(subscribeSpy.calledOnce, 'subscribe not called').equal(true);
+                expect(subscribeSpy.args[0][0], 'First argument is not a Subject instance').to.be.an.instanceOf(Subject);
             });
         });
 
@@ -91,9 +121,10 @@ describe('Example 6', () => {
                 expect(Subject.calledOnce, 'Subject instane not created').equal(true);
             });
 
-            it('should call subscribe', () => {
+            it('should call subscribe with arguments: A function. For now can be empty.', () => {
                 example6.initialize(undefined, Subject);
                 expect(subscribeSpy.calledOnce, 'subscribe not called').equal(true);
+                expect(subscribeSpy.args[0][0], 'First argument is not a function').to.be.a('function');
             });
         });
 
@@ -156,7 +187,7 @@ describe('Example 6', () => {
                 subscriber.unsubscribe();
             });
 
-            it('should emit the text written in the input when the button is clicked', () => {
+            it('should emit the text written in the input when the button is clicked (use addClickEventListenerToElement and getValueFromElement functions. The listener callback function calls the instance function Subject.next to emit an event with the value of the input1)', () => {
                 const [ subscriberLocal, scheduler, subject ] = initializeSubjectWithSubscriber(subscriberCallbackSpy);
                 const buttonElement = document.querySelector('.example6 .button1');
                 const inputElement = document.querySelector('.example6 .input1');
@@ -170,7 +201,7 @@ describe('Example 6', () => {
         });
 
         describe('subscriber behaviour', () => {
-            it('should make an axios get call with the emitted value and write the result in a text box on keyup', () => {
+            it('should make an Ajax call using Axios with the emitted value and write the result in a text box on keyup (use searchSpecieAndWriteListInElement function)', () => {
                 const scheduler = new VirtualTimeScheduler(undefined, 500);
                 const [ suggestObservable, subject ] = example6.initialize(undefined, undefined, scheduler);
                 const inputElement = document.querySelector('.example6 .input1');

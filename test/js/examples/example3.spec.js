@@ -45,14 +45,17 @@ describe('Example 3', () => {
                 Observable.interval.restore();
             });
 
-            it('should call interval with 1000 ms', () => {
-                example3.initialize(Observable);
+            it('should call interval with arguments: 1000 and scheduler instance', () => {
+                example3.initialize(Observable, new VirtualTimeScheduler());
                 expect(Observable.interval.calledOnce, 'interval with argument 1000 not called').equal(true);
+                expect(Observable.interval.args[0][1]).to.be.an.instanceOf(VirtualTimeScheduler);
             });
 
-            it('should call scan', () => {
+            it('should call scan with arguments: a function that receives an accumulator with a fibonacci array and calculates the next array (use calculateNextFibonacciArray)', () => {
                 example3.initialize(Observable);
                 expect(scanStub.calledOnce, 'scan not called').equal(true);
+                expect(scanStub.args[0][0]).to.be.a('function');
+                expect(scanStub.args[0][0]([0,1,1,2])).to.deep.equal([0,1,1,2,3]);
             });
 
             it('should call take with 10', () => {
@@ -60,7 +63,7 @@ describe('Example 3', () => {
                 expect(takeStub.calledOnce, 'take with argument 10 not called').equal(true);
             });
 
-            it('should call subscribe', () => {
+            it('should call subscribe with arguments: a function that receives the current fibonacci array and calls writeArrayInElement', () => {
                 example3.initialize(Observable);
                 expect(subscribeSpy.calledOnce, 'subscribe not called').equal(true);
             });
