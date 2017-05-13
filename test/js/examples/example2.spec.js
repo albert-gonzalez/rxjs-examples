@@ -19,7 +19,7 @@ describe('Example 2', () => {
             global.document = undefined;
         });
 
-        describe('stream configuration', () => {
+        describe('Observable configuration', () => {
             let subscribeSpy;
             let takeStub;
 
@@ -38,7 +38,7 @@ describe('Example 2', () => {
                 Observable.interval.restore();
             });
 
-            it('should call interval with arguments: 2000 and a scheduler instance', () => {
+            it('should call Observable.interval with arguments: 2000 and a scheduler instance', () => {
                 example2.initialize(Observable, new VirtualTimeScheduler());
                 expect(Observable.interval.calledOnce, 'interval with argument 2000 not called').equal(true);
                 expect(Observable.interval.args[0][1]).to.be.an.instanceOf(VirtualTimeScheduler);

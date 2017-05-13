@@ -26,6 +26,31 @@ describe('Example 6', () => {
             axios.get.restore();
         });
 
+        describe('subject configuration', () => {
+            let subscribeSpy;
+
+            beforeEach(() => {
+                subscribeSpy = sinon.spy();
+
+                sinon.stub(rxjs, 'Subject').returns({ subscribe: subscribeSpy });
+            });
+
+            afterEach(() => {
+                rxjs.Subject.restore();
+            });
+
+            it('should create new Subject instance', () => {
+                example6.initialize(undefined, Subject);
+                expect(Subject.calledOnce, 'Subject instane not created').equal(true);
+            });
+
+            it('should call subscribe with arguments: A function. For now can be empty.', () => {
+                example6.initialize(undefined, Subject);
+                expect(subscribeSpy.calledOnce, 'subscribe not called').equal(true);
+                expect(subscribeSpy.args[0][0], 'First argument is not a function').to.be.a('function');
+            });
+        });
+
         describe('observable configuration', () => {
             let debounceTimeStub;
             let mapStub;
@@ -47,7 +72,7 @@ describe('Example 6', () => {
                 Observable.fromEvent.restore();
             });
 
-            it('should call fromEvent', () => {
+            it('should call Observable.fromEvent with arguments: a HTMLInputElement instance with the class input1 and the string "keyup" (use getElement function) ', () => {
                 example6.initialize(Observable);
                 expect(Observable.fromEvent.calledOnce, 'fromEvent not called').equal(true);
                 expect(Observable.fromEvent.args[0][0]).to.be.an.instanceOf(window.HTMLInputElement, `FromEvent call: First argument is not a HTMLInputElement instance`);
@@ -96,35 +121,10 @@ describe('Example 6', () => {
                 expect(filterStub.args[0][0]('Dog'), 'First argument does not return true if the length of the received string is greater than 2').to.equal(true);
             });
 
-            it('should call subscribe with argument: A Subject instance', () => {
+            it('should call subscribe with argument: the Subject instance created before', () => {
                 example6.initialize(Observable);
                 expect(subscribeSpy.calledOnce, 'subscribe not called').equal(true);
                 expect(subscribeSpy.args[0][0], 'First argument is not a Subject instance').to.be.an.instanceOf(Subject);
-            });
-        });
-
-        describe('subject configuration', () => {
-            let subscribeSpy;
-
-            beforeEach(() => {
-                subscribeSpy = sinon.spy();
-
-                sinon.stub(rxjs, 'Subject').returns({ subscribe: subscribeSpy });
-            });
-
-            afterEach(() => {
-                rxjs.Subject.restore();
-            });
-
-            it('should create new Subject instance', () => {
-                example6.initialize(undefined, Subject);
-                expect(Subject.calledOnce, 'Subject instane not created').equal(true);
-            });
-
-            it('should call subscribe with arguments: A function. For now can be empty.', () => {
-                example6.initialize(undefined, Subject);
-                expect(subscribeSpy.calledOnce, 'subscribe not called').equal(true);
-                expect(subscribeSpy.args[0][0], 'First argument is not a function').to.be.a('function');
             });
         });
 

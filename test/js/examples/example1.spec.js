@@ -19,7 +19,7 @@ describe('Example 1', () => {
             global.document = undefined;
         });
 
-        describe('stream configuration', () => {
+        describe('observable configuration', () => {
             let delayStub;
             let subscribeSpy;
 
@@ -34,7 +34,7 @@ describe('Example 1', () => {
                 Observable.fromEvent.restore();
             });
 
-            it('should call fromEvent with arguments: a HTMLButtonElement instance and the string "click"', () => {
+            it('should call Observable.fromEvent with arguments: a HTMLButtonElement instance and the string "click"', () => {
                 example1.initialize(Observable);
                 expect(Observable.fromEvent.calledOnce, 'fromEvent not called once').equal(true);
                 expect(Observable.fromEvent.args[0][0]).to.be.an.instanceOf(window.HTMLButtonElement, `fromEvent call: First argument is not a HTMLButtonElement instance`);

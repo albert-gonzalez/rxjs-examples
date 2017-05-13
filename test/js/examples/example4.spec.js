@@ -19,7 +19,7 @@ describe('Example 4', () => {
             global.document = undefined;
         });
 
-        describe('stream configuration', () => {
+        describe('observable configuration', () => {
             let scanStub;
             let subscribeSpy;
 
@@ -36,7 +36,7 @@ describe('Example 4', () => {
                 Observable.zip.restore();
             });
 
-            it('should call fromEvent for every button (three times) with arguments: ButtonElement and "click" string (use fromEvent function)', () => {
+            it('should call Observable.fromEvent for every button (three times) with arguments: ButtonElement and "click" string (use getElement function)', () => {
                 example4.initialize(Observable);
                 expect(Observable.fromEvent.calledThrice, 'fromEvent not called three times').equal(true);
 
@@ -45,7 +45,7 @@ describe('Example 4', () => {
                 expectsForFromEventCall(3, 'Third');
             });
 
-            it('should call zip passing three button observables as arguments', () => {
+            it('should call Observable.zip passing three button observables as arguments', () => {
                 example4.initialize(Observable);
                 expect(Observable.zip.calledOnce, 'zip not called').equal(true);
                 expect(Observable.zip.args[0].length, 'zip not called with three arguments').equal(3);

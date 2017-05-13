@@ -36,7 +36,7 @@ describe('Example 5', () => {
                 Observable.create.restore();
             });
 
-            it('should call create with argument: A function that receives an observer and configures the observable. See the examples page for more info (use addChangeEventListenerToElement and getElementValueFromEvent functions)', () => {
+            it('should call Observable.create with argument: A function that receives an observer and configures the observable. See the examples page for more info (use addChangeEventListenerToElement and getElementValueFromEvent functions)', () => {
                 example5.initialize(Observable);
                 expect(Observable.create.calledOnce, 'create not called').equal(true);
                 expect(Observable.create.args[0][0], 'First argument is not a function').to.be.a('function');
