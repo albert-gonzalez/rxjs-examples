@@ -9,7 +9,7 @@ describe('Example 1', () => {
         let window;
 
         beforeEach(() => {
-            window = new JSDOM('<div class="example1"><button class="button1">Button</button><div class="rectangle1"></div></div>').window;
+            window = new JSDOM('<button class="button_1">Button</button><div class="rectangle_1"></div>').window;
             global.window =  window;
             global.document = window.document;
         });
@@ -38,7 +38,7 @@ describe('Example 1', () => {
                 example1.initialize(Observable);
                 expect(Observable.fromEvent.calledOnce, 'fromEvent not called once').equal(true);
                 expect(Observable.fromEvent.args[0][0]).to.be.an.instanceOf(window.HTMLButtonElement, `fromEvent call: First argument is not a HTMLButtonElement instance`);
-                expect(Observable.fromEvent.args[0][0].className).to.equal(`button1`, `fromEvent call: First argument does not have the class "button1"`);
+                expect(Observable.fromEvent.args[0][0].className).to.equal(`button_1`, `fromEvent call: First argument does not have the class "button1"`);
                 expect(Observable.fromEvent.args[0][1]).to.equal('click', `fromEvent call: Second argument is not "click"`);
             });
 
@@ -48,7 +48,7 @@ describe('Example 1', () => {
                 expect(delayStub.args[0][1]).to.be.an.instanceOf(VirtualTimeScheduler);
             });
 
-            it('should call subscribe with argument: A function that calls fillElementWithRandomColor function to fill the .rectangle1 element', () => {
+            it('should call subscribe with argument: A function that calls fillElementWithRandomColor function to fill the .rectangle_1 element', () => {
                 example1.initialize(Observable);
                 expect(subscribeSpy.calledOnce, 'subscribe not called once').equal(true);
             });
@@ -66,13 +66,13 @@ describe('Example 1', () => {
         describe('observable behaviour', () => {
             it('should emit after 1 second of clicking button', () => {
                 const scheduler = new VirtualTimeScheduler(undefined, 1000);
-                const rectangleElement = document.querySelector('.example1 .rectangle1');
+                const rectangleElement = document.querySelector('.rectangle_1');
                 const [ buttonClickedObservable] = example1.initialize(Observable, scheduler);
                 const subscriberCallbackSpy = sinon.spy();
 
                 const subscriber = buttonClickedObservable.subscribe(subscriberCallbackSpy);
 
-                document.querySelector('.button1').dispatchEvent(new window.Event('click'));
+                document.querySelector('.button_1').dispatchEvent(new window.Event('click'));
                 expect(subscriberCallbackSpy.notCalled, 'Observable emitted a value').equal(true);
 
                 scheduler.flush();
@@ -82,13 +82,13 @@ describe('Example 1', () => {
         });
 
         describe('subscriber behaviour', () => {
-            it('should set background of .rectangle1 with a random rgb value after 1 second of clicking button', () => {
+            it('should set background of .rectangle_1 with a random rgb value after 1 second of clicking button', () => {
                 const scheduler = new VirtualTimeScheduler(undefined, 1000);
-                const rectangleElement = document.querySelector('.example1 .rectangle1');
+                const rectangleElement = document.querySelector('.rectangle_1');
 
                 example1.initialize(Observable, scheduler);
 
-                document.querySelector('.button1').dispatchEvent(new window.Event('click'));
+                document.querySelector('.button_1').dispatchEvent(new window.Event('click'));
                 expect(rectangleElement.style.background, 'rectangle not empty just after clicking button').equal('');
 
                 scheduler.flush();

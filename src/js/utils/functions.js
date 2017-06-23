@@ -5,23 +5,23 @@ function getRandomRGBValue() {
     return [random0To255Value(), random0To255Value(), random0To255Value()];
 }
 
-export function getElement(exampleNumber, elementClass) {
+export function getElement(selector) {
     return document
-        .querySelector(`.example${exampleNumber} .${elementClass}`);
+        .querySelector(selector);
 }
 
-export function getValueFromElement(exampleNumber, elementClass) {
+export function getValueFromElement(selector) {
     return document
-        .querySelector(`.example${exampleNumber} .${elementClass}`).value;
+        .querySelector(selector).value;
 }
 
-export function fillElementWithRandomColor(exampleNumber, elementClass) {
+export function fillElementWithRandomColor(selector) {
     if (!document) {
         return;
     }
 
     const element = document
-        .querySelector(`.example${exampleNumber} .${elementClass}`);
+        .querySelector(selector);
 
     if (element){
         let a = getRandomRGBValue();
@@ -37,13 +37,13 @@ export function calculateNextFibonacciArray(fibonaccyArray) {
     ];
 }
 
-export function writeArrayInElement(array, exampleNumber, elementClass) {
+export function writeArrayInElement(array, selector) {
     if (!document) {
         return;
     }
 
     const element = document
-        .querySelectorAll(`.example${exampleNumber} .${elementClass}`)
+        .querySelectorAll(selector)
         .item(0);
 
     if (element){
@@ -55,31 +55,31 @@ export function increaseCounter(accumulator) {
     return accumulator + 1;
 }
 
-export function writeTextInElement(text, exampleNumber, elementClass) {
+export function writeTextInElement(text, selector) {
     if (!document) {
         return;
     }
 
     const element = document
-        .querySelector(`.example${exampleNumber} .${elementClass}`);
+        .querySelector(selector);
 
     if (element){
         element.innerHTML = text;
     }
 }
 
-export function addChangeEventListenerToElement(exampleNumber, elementClass, callback) {
-    document.querySelector(`.example${exampleNumber} .${elementClass}`)
+export function addChangeEventListenerToElement(selector, callback) {
+    document.querySelector(selector)
         .addEventListener('change', callback);
 }
 
-export function addClickEventListenerToElement(exampleNumber, elementClass, callback) {
-    document.querySelector(`.example${exampleNumber} .${elementClass}`)
+export function addClickEventListenerToElement(selector, callback) {
+    document.querySelector(selector)
         .addEventListener('click', callback);
 }
 
-export function addKeyupEventListenerToElement(exampleNumber, elementClass, callback) {
-    document.querySelector(`.example${exampleNumber} .${elementClass}`)
+export function addKeyupEventListenerToElement(selector, callback) {
+    document.querySelector(selector)
         .addEventListener('keyup', callback);
 }
 
@@ -87,14 +87,14 @@ export function getElementValueFromEvent(event) {
     return event.target.value;
 }
 
-export function searchSpecieAndWriteListInElement(query, exampleNumber, elementClass) {
-    writeTextInElement('Searching...', exampleNumber, elementClass);
+export function searchSpecieAndWriteListInElement(query, selector) {
+    writeTextInElement('Searching...', selector);
     axios
         .get(`http://api.gbif.org/v1/species/suggest?q=${query}&limit=5`)
         .then((response) => {
             const resultList = response.data.map((result) => {
                 return `<li>${result.scientificName} (${result.canonicalName})</li>`;
             }).join('');
-            writeTextInElement(resultList, exampleNumber, elementClass);
+            writeTextInElement(resultList, selector);
         });
 }

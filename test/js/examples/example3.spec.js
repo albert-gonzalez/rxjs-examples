@@ -9,7 +9,7 @@ describe('Example 3', () => {
         let window;
 
         beforeEach(() => {
-            window = new JSDOM('<div class="example3"><div class="text"></div></div>').window;
+            window = new JSDOM('<div class="text_3"></div>').window;
             global.window =  window;
             global.document = window.document;
         });
@@ -101,13 +101,13 @@ describe('Example 3', () => {
             it('should write the 12 first fibonacci values after 10 seconds', () => {
                 const scheduler = new VirtualTimeScheduler(undefined, 10000);
                 const [ fibonacciObservable, subscriber ] = example3.initialize(Observable, scheduler);
-                const textElement = document.querySelector('.example3 .text');
+                const textElement = document.querySelector('.text_3');
                 const fibonacciValues = '0 1 1 2 3 5 8 13 21 34 55 89';
 
-                expect(textElement.innerHTML, 'text element not empty').equal('');
+                expect(textElement.innerHTML, 'text_3 element not empty').equal('');
                 scheduler.flush();
 
-                expect(textElement.innerHTML, 'text element not had fibonacci values').to.equal(fibonacciValues);
+                expect(textElement.innerHTML, 'text_3 element not had fibonacci values').to.equal(fibonacciValues);
 
                 subscriber.unsubscribe();
             });

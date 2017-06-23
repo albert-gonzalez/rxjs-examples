@@ -9,7 +9,7 @@ describe('Example 2', () => {
         let window;
 
         beforeEach(() => {
-            window = new JSDOM('<div class="example2"><div class="rectangle1"></div></div>').window;
+            window = new JSDOM('<div class="rectangle_2"></div>').window;
             global.window =  window;
             global.document = window.document;
         });
@@ -49,7 +49,7 @@ describe('Example 2', () => {
                 expect(takeStub.calledOnce, 'take with argument 5 not called').equal(true);
             });
 
-            it('should call subscribe with arguments: a function that calls fillElementWithRandomColor function to fill the .rectangle1 element', () => {
+            it('should call subscribe with arguments: a function that calls fillElementWithRandomColor function to fill the .rectangle_2 element', () => {
                 example2.initialize(Observable);
                 expect(subscribeSpy.calledOnce, 'subscribe not called').equal(true);
                 expect(subscribeSpy.args[0][0]).to.be.a('function');
@@ -83,10 +83,10 @@ describe('Example 2', () => {
         });
 
         describe('subscriber behaviour', () => {
-            it('should set background of .rectangle1 with a random rgb value in 2 seconds intervals', () => {
+            it('should set background of .rectangle_2 with a random rgb value in 2 seconds intervals', () => {
                 const scheduler = new VirtualTimeScheduler(undefined, 10000);
                 const [ everyTwoSeconds, subscriber ] = example2.initialize(Observable, scheduler);
-                const rectangleElement = document.querySelector('.example2 .rectangle1');
+                const rectangleElement = document.querySelector('.rectangle_2');
                 const subscriberSpy = sinon.spy();
 
                 expect(rectangleElement.style.background, 'background not empty at the beginning').equal('');

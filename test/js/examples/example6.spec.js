@@ -11,7 +11,7 @@ describe('Example 6', () => {
         let window;
 
         beforeEach(() => {
-            window = new JSDOM('<div class="example6"><input class="input1" /><button class="button1">Send</button><div class="text"></div></div>').window;
+            window = new JSDOM('<input class="input_6" /><button class="button_6">Send</button><div class="text_6"></div>').window;
             global.window =  window;
             global.document = window.document;
             sinon.stub(axios, 'get')
@@ -72,11 +72,11 @@ describe('Example 6', () => {
                 Observable.fromEvent.restore();
             });
 
-            it('should call Observable.fromEvent with arguments: a HTMLInputElement instance with the class input1 and the string "keyup" (use getElement function) ', () => {
+            it('should call Observable.fromEvent with arguments: a HTMLInputElement instance with the class input_6 and the string "keyup" (use getElement function) ', () => {
                 example6.initialize(Observable);
                 expect(Observable.fromEvent.calledOnce, 'fromEvent not called').equal(true);
                 expect(Observable.fromEvent.args[0][0]).to.be.an.instanceOf(window.HTMLInputElement, `FromEvent call: First argument is not a HTMLInputElement instance`);
-                expect(Observable.fromEvent.args[0][0].className).to.equal(`input1`, `FromEvent call: First argument does not have the class "input1"`);
+                expect(Observable.fromEvent.args[0][0].className).to.equal(`input_6`, `FromEvent call: First argument does not have the class "input_6"`);
                 expect(Observable.fromEvent.args[0][1]).to.equal('keyup', `FromEvent call: Second argument is not "keyup"`);
             });
 
@@ -97,7 +97,7 @@ describe('Example 6', () => {
                     done(expect(mapStub.args[0][0], 'First argument is not a function').to.be.a('function'));
                 }
 
-                const inputElement = document.querySelector('.example6 .input1');
+                const inputElement = document.querySelector('.input_6');
                 inputElement.value = 'Dog';
                 const eventListener = function(event) {
                     const returnedValue = mapStub.args[0][0](event);
@@ -152,7 +152,7 @@ describe('Example 6', () => {
 
             it('should emit the text written in the input with a debounce time of 500ms when its length is greather than 2', () => {
                 const [ subscriberLocal, scheduler ] = initializeObservableWithSubscriber(subscriberCallbackSpy);
-                const inputElement = document.querySelector('.example6 .input1');
+                const inputElement = document.querySelector('.input_6');
                 inputElement.value = 'Dog';
                 inputElement.dispatchEvent(new window.KeyboardEvent('keyup'));
                 inputElement.dispatchEvent(new window.KeyboardEvent('keyup'));
@@ -187,10 +187,10 @@ describe('Example 6', () => {
                 subscriber.unsubscribe();
             });
 
-            it('should emit the text written in the input when the button is clicked (use addClickEventListenerToElement and getValueFromElement functions. The listener callback function calls the instance function Subject.next to emit an event with the value of the input1)', () => {
+            it('should emit the text written in the input when the button is clicked (use addClickEventListenerToElement and getValueFromElement functions. The listener callback function calls the instance function Subject.next to emit an event with the value of the input_6)', () => {
                 const [ subscriberLocal, scheduler, subject ] = initializeSubjectWithSubscriber(subscriberCallbackSpy);
-                const buttonElement = document.querySelector('.example6 .button1');
-                const inputElement = document.querySelector('.example6 .input1');
+                const buttonElement = document.querySelector('.button_6');
+                const inputElement = document.querySelector('.input_6');
                 inputElement.value = 'Dog';
                 buttonElement.dispatchEvent(new window.Event('click'));
                 subscriber = subscriberLocal;
@@ -204,8 +204,8 @@ describe('Example 6', () => {
             it('should make an Ajax call using Axios with the emitted value and write the result in a text box on keyup (use searchSpecieAndWriteListInElement function)', () => {
                 const scheduler = new VirtualTimeScheduler(undefined, 500);
                 const [ suggestObservable, subject ] = example6.initialize(undefined, undefined, scheduler);
-                const inputElement = document.querySelector('.example6 .input1');
-                const textElement = document.querySelector('.example6 .text');
+                const inputElement = document.querySelector('.input_6');
+                const textElement = document.querySelector('.text_6');
                 inputElement.value = 'Dog';
 
                 expect(textElement.innerHTML, 'Text not empty before keyup').equal('');
@@ -223,9 +223,9 @@ describe('Example 6', () => {
 
             it('should make an axios get call with the emitted value and write the result in a text box on click', () => {
                 const [ suggestObservable, subject ] = example6.initialize();
-                const buttonElement = document.querySelector('.example6 .button1');
-                const inputElement = document.querySelector('.example6 .input1');
-                const textElement = document.querySelector('.example6 .text');
+                const buttonElement = document.querySelector('.button_6');
+                const inputElement = document.querySelector('.input_6');
+                const textElement = document.querySelector('.text_6');
                 inputElement.value = 'Dog';
 
                 expect(textElement.innerHTML, 'Text not empty before clicking the button').equal('');

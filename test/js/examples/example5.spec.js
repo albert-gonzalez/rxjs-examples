@@ -11,7 +11,7 @@ describe('Example 5', () => {
         beforeEach(() => {
             const virtualConsole = new VirtualConsole();
             virtualConsole.on('error', () => {});
-            window = new JSDOM('<div class="example5"><input class="input1"><div class="text"></div></div>', { virtualConsole }).window;
+            window = new JSDOM('<input class="input_5"><div class="text_5"></div>', { virtualConsole }).window;
             global.window =  window;
             global.document = window.document;
         });
@@ -102,40 +102,40 @@ describe('Example 5', () => {
 
         describe('subscriber behaviour', () => {
             it('should write in the result box the emitted value', () => {
-                const textElement = document.querySelector('.example5 .text');
+                const textElement = document.querySelector('.text_5');
 
-                expect(textElement.innerHTML, 'text element not empty').equal('');
+                expect(textElement.innerHTML, 'text_5 element not empty').equal('');
 
                 initializeObservable(123);
 
-                expect(textElement.innerHTML, 'text element content incorrect').equal('246');
+                expect(textElement.innerHTML, 'text_5 element content incorrect').equal('246');
             });
 
             it('should write in the result box the error message if the observable fails', () => {
-                const textElement = document.querySelector('.example5 .text');
+                const textElement = document.querySelector('.text_5');
 
-                expect(textElement.innerHTML, 'text element not empty').equal('');
+                expect(textElement.innerHTML, 'text_5 element not empty').equal('');
 
                     initializeObservable('Cobi');
 
-                expect(textElement.innerHTML, 'text element content incorrect').equal('CRITICAL ERROR: Not a number!');
+                expect(textElement.innerHTML, 'text_5 element content incorrect').equal('CRITICAL ERROR: Not a number!');
             });
 
             it('should write "COMPLETED" in the result box if the observable is completed', () => {
-                const textElement = document.querySelector('.example5 .text');
+                const textElement = document.querySelector('.text_5');
 
-                expect(textElement.innerHTML, 'text element not empty').equal('');
+                expect(textElement.innerHTML, 'text_5 element not empty').equal('');
 
                 initializeObservable('END');
 
-                expect(textElement.innerHTML, 'text element not empty').equal('COMPLETED');
+                expect(textElement.innerHTML, 'text_5 element not empty').equal('COMPLETED');
             });
         });
     });
 });
 
 function initializeObservableWithSubscriber(value, next, error, complete) {
-    const inputElement = document.querySelector('.example5 .input1');
+    const inputElement = document.querySelector('.input_5');
     const [ customObservable ] = example5.initialize();
     const subscriber = customObservable.subscribe(next, error, complete);
 
@@ -146,8 +146,8 @@ function initializeObservableWithSubscriber(value, next, error, complete) {
 }
 
 function initializeObservable(value) {
-    const inputElement = document.querySelector('.example5 .input1');
-    const textElement = document.querySelector('.example5 .text');
+    const inputElement = document.querySelector('.input_5');
+    const textElement = document.querySelector('.text_5');
     const [ customObservable ] = example5.initialize();
 
     inputElement.value = value;
