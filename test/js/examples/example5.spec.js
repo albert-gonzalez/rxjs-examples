@@ -79,21 +79,21 @@ describe('Example 5', () => {
                 subscriber.unsubscribe();
             });
 
-            it('should emit the number written in the input box doubled when this changes', () => {
+            it('should emit the number written in the input box doubled when this input changes', () => {
                 subscriber = initializeObservableWithSubscriber(123, subscriberCallbackSpy);
 
                 expect(subscriberCallbackSpy.calledOnce, 'observable not emmited').equal(true);
                 expect(subscriberCallbackSpy.args[0][0], 'emitted value not correct').equal(246);
             });
 
-            it('should fail if the value written is not a number', () => {
+            it('should fail if the value written in the input is not a number', () => {
                 subscriber = initializeObservableWithSubscriber('Cobi', null, subscriberCallbackSpy);
 
                 expect(subscriberCallbackSpy.calledOnce, 'observable fail not emitted').equal(true);
                 expect(subscriberCallbackSpy.args[0][0]).equal('CRITICAL ERROR: Not a number!');
             });
 
-            it('should complete if the value written is END', () => {
+            it('should complete if the value written in the input is END', () => {
                 subscriber = initializeObservableWithSubscriber('END', null, null, subscriberCallbackSpy);                
 
                 expect(subscriberCallbackSpy.calledOnce, 'observable not completed').equal(true);

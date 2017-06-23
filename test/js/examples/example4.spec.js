@@ -45,7 +45,7 @@ describe('Example 4', () => {
                 expectsForFromEventCall(3, 'Third');
             });
 
-            it('should call Observable.zip passing three button observables as arguments', () => {
+            it('should call Observable.zip passing the three button observables created before as arguments', () => {
                 example4.initialize(Observable);
                 expect(Observable.zip.calledOnce, 'zip not called').equal(true);
                 expect(Observable.zip.args[0].length, 'zip not called with three arguments').equal(3);
@@ -86,24 +86,24 @@ describe('Example 4', () => {
                 const subscriber = threeButtonsClickedObservable.subscribe(subscriberCallbackSpy);
 
                 document.querySelector('.button_4_1').dispatchEvent(new window.Event('click'));
-                expect(subscriberCallbackSpy.notCalled, 'observable emitted after clicking button').equal(true);
+                expect(subscriberCallbackSpy.notCalled, 'observable emitted after clicking the first button button').equal(true);
                 document.querySelector('.button_4_2').dispatchEvent(new window.Event('click'));
-                expect(subscriberCallbackSpy.notCalled, 'observable emitted after clicking button').equal(true);
+                expect(subscriberCallbackSpy.notCalled, 'observable emitted after clicking the second button').equal(true);
                 document.querySelector('.button_4_3').dispatchEvent(new window.Event('click'));
-                expect(subscriberCallbackSpy.calledWith(1), 'observable not emitted with argument 1 after clicking button').equal(true);
+                expect(subscriberCallbackSpy.calledWith(1), 'observable not emitted with argument 1 after clicking the thrid button').equal(true);
 
                 document.querySelector('.button_4_1').dispatchEvent(new window.Event('click'));
                 document.querySelector('.button_4_1').dispatchEvent(new window.Event('click'));
-                expect(subscriberCallbackSpy.calledOnce, 'observable emitted after clicking button').equal(true);
+                expect(subscriberCallbackSpy.calledOnce, 'observable emitted after clicking the first button').equal(true);
 
                 document.querySelector('.button_4_2').dispatchEvent(new window.Event('click'));
                 document.querySelector('.button_4_2').dispatchEvent(new window.Event('click'));
-                expect(subscriberCallbackSpy.calledOnce, 'observable emitted after clicking button').equal(true);
+                expect(subscriberCallbackSpy.calledOnce, 'observable emitted after clicking the second button').equal(true);
 
                 document.querySelector('.button_4_3').dispatchEvent(new window.Event('click'));
-                expect(subscriberCallbackSpy.calledWith(2), 'observable not emitted with argument 2 after clicking button').equal(true);
+                expect(subscriberCallbackSpy.calledWith(2), 'observable not emitted with argument 2 after clicking the third button').equal(true);
                 document.querySelector('.button_4_3').dispatchEvent(new window.Event('click'));
-                expect(subscriberCallbackSpy.calledWith(3), 'observable not emitted with argument 3 after clicking button').equal(true);
+                expect(subscriberCallbackSpy.calledWith(3), 'observable not emitted with argument 3 after clicking the third button').equal(true);
 
                 subscriber.unsubscribe();
             });
@@ -116,24 +116,24 @@ describe('Example 4', () => {
                 example4.initialize(Observable);
 
                 document.querySelector('.button_4_1').dispatchEvent(new window.Event('click'));
-                expect(textElement.innerHTML, 'text_4 element not empty after clicking button').equal('');
+                expect(textElement.innerHTML, 'text_4 element not empty after clicking the first button').equal('');
                 document.querySelector('.button_4_2').dispatchEvent(new window.Event('click'));
-                expect(textElement.innerHTML, 'text_4 element not empty after clicking button').equal('');
+                expect(textElement.innerHTML, 'text_4 element not empty after clicking the second button').equal('');
                 document.querySelector('.button_4_3').dispatchEvent(new window.Event('click'));
-                expect(textElement.innerHTML, 'text_4 element not contained 1 after clicking button').equal('1');
+                expect(textElement.innerHTML, 'text_4 element not contained 1 after clicking the third button').equal('1');
 
                 document.querySelector('.button_4_1').dispatchEvent(new window.Event('click'));
                 document.querySelector('.button_4_1').dispatchEvent(new window.Event('click'));
-                expect(textElement.innerHTML, 'text_4 element not contained 1 after clicking button').equal('1');
+                expect(textElement.innerHTML, 'text_4 element not contained 1 after clicking the first button').equal('1');
 
                 document.querySelector('.button_4_2').dispatchEvent(new window.Event('click'));
                 document.querySelector('.button_4_2').dispatchEvent(new window.Event('click'));
-                expect(textElement.innerHTML, 'text_4 element not contained 1 after clicking button').equal('1');
+                expect(textElement.innerHTML, 'text_4 element not contained 1 after clicking the second button').equal('1');
 
                 document.querySelector('.button_4_3').dispatchEvent(new window.Event('click'));
-                expect(textElement.innerHTML, 'text_4 element not contained 2 after clicking button').equal('2');
+                expect(textElement.innerHTML, 'text_4 element not contained 2 after clicking the third button').equal('2');
                 document.querySelector('.button_4_3').dispatchEvent(new window.Event('click'));
-                expect(textElement.innerHTML, 'text_4 element not contained 3 after clicking button').equal('3');
+                expect(textElement.innerHTML, 'text_4 element not contained 3 after clicking the third button').equal('3');
             });
         });
     });
