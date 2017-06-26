@@ -66,7 +66,7 @@ describe('Example 2', () => {
         });
 
         describe('observable behaviour', () => {
-            it('should emit a value every 2 seconds until it have emitted 5 times', () => {
+            it('should emit a value every 2 seconds until it has emitted 5 times', () => {
                 const scheduler = new VirtualTimeScheduler(undefined, 10000);
                 const [ everyTwoSeconds, subscriber ] = example2.initialize(Observable, scheduler);
                 const subscriberCallbackSpy = sinon.spy();
