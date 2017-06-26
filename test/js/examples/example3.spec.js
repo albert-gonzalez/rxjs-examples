@@ -79,7 +79,7 @@ describe('Example 3', () => {
         });
 
         describe('observable behaviour', () => {
-            it('should write the 12 first fibonacci values after 10 seconds', () => {
+            it('should emit 10 times every second and the final emitted value should be an array with the 12 first fibonacci values', () => {
                 const scheduler = new VirtualTimeScheduler(undefined, 10000);
                 const [ fibonacciObservable, subscriber ] = example3.initialize(Observable, scheduler);
                 const subscriberSpy = sinon.spy();
