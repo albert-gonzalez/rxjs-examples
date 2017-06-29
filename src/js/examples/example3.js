@@ -9,8 +9,8 @@ const firstFibonacciValues = [0, 1];
 export function initialize(Observable = ObservableClass, scheduler = undefined) {
     const fibonacciObservable = Observable
         .interval(1000, scheduler)
-        .take(10)
-        .scan(calculateNextFibonacciArray, firstFibonacciValues);
+        .scan(calculateNextFibonacciArray, firstFibonacciValues)
+        .take(10);
 
     const subscriber = fibonacciObservable.subscribe((fibonnaci) => {
         writeArrayInElement(fibonnaci, '.text_3');
