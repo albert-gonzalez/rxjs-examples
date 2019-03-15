@@ -40,7 +40,7 @@ describe('Example 4', () => {
         operators.scan.restore();
       });
 
-      it('should call creators.fromEvent for every button (three times) with arguments: ButtonElement and "click" string (use getElement function)', () => {
+      it('should call fromEvent for every button (three times) with arguments: ButtonElement and "click" string (use getElement function)', () => {
         example4.initialize(Observable);
         expect(creators.fromEvent.calledThrice, 'fromEvent not called three times').equal(true);
 
@@ -49,7 +49,7 @@ describe('Example 4', () => {
         expectsForFromEventCall(3, 'Third');
       });
 
-      it('should call creators.zip passing the three button observables created before as arguments', () => {
+      it('should call zip passing the three button observables created before as arguments', () => {
         example4.initialize(Observable);
         expect(creators.zip.calledOnce, 'zip not called').equal(true);
         expect(creators.zip.args[0].length, 'zip not called with three arguments').equal(3);
