@@ -1,14 +1,17 @@
-import { Observable as ObservableClass} from 'rxjs';
+import { Observable } from "rxjs";
+import { map } from 'rxjs/operators';
+
 import {
     writeTextInElement,
     addChangeEventListenerToElement,
     getElementValueFromEvent
 } from '../utils/functions';
 
-export function initialize(Observable = ObservableClass) {
-    const customObservable = Observable
-        .create(configureObserver)
-        .map(doubleValue);
+export function initialize() {
+    const customObservable = new Observable(configureObserver)
+        .pipe(
+            map(doubleValue)
+        );
 
     const subscription = customObservable
         .subscribe(

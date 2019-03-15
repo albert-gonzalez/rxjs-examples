@@ -24,16 +24,15 @@ export function fillElementWithRandomColor(selector) {
         .querySelector(selector);
 
     if (element){
-        let a = getRandomRGBValue();
         element.style.background = `rgb(${getRandomRGBValue().join(',')})`;
     }
 }
 
-export function calculateNextFibonacciArray(fibonaccyArray) {
-    const fibonaccyArrayLength = fibonaccyArray.length;
+export function calculateNextFibonacciArray(fibonacciArray) {
+    const fibonacciArrayLength = fibonacciArray.length;
     return [
-        ...fibonaccyArray,
-        fibonaccyArray[fibonaccyArrayLength - 1] + fibonaccyArray[fibonaccyArrayLength - 2]
+        ...fibonacciArray,
+        fibonacciArray[fibonacciArrayLength - 1] + fibonacciArray[fibonacciArrayLength - 2]
     ];
 }
 

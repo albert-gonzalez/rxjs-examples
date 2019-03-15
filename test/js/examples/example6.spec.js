@@ -3,8 +3,9 @@ import sinon from 'sinon';
 import * as example6 from '../../../src/js/examples/example6';
 import { JSDOM } from 'jsdom';
 import { VirtualTimeScheduler, Subscriber, Observable, Subject } from 'rxjs';
-import rxjs from 'rxjs';
+import * as creators from 'rxjs';
 import axios from 'axios';
+import * as operators from 'rxjs/operators';
 
 describe('Example 6', () => {
     describe('initialize function', () => {
@@ -32,75 +33,75 @@ describe('Example 6', () => {
             beforeEach(() => {
                 subscribeSpy = sinon.spy();
 
-                sinon.stub(rxjs, 'Subject').returns({ subscribe: subscribeSpy });
+                sinon.stub(creators, 'Subject').returns({ subscribe: subscribeSpy });
             });
 
             afterEach(() => {
-                rxjs.Subject.restore();
+                creators.Subject.restore();
             });
 
             it('should create new Subject instance', () => {
-                example6.initialize(undefined, Subject);
-                expect(Subject.calledOnce, 'Subject instane not created').equal(true);
+                example6.initialize();
+                expect(Subject.calledOnce, 'Subject instance not created').equal(true);
             });
 
             it('should call subscribe with arguments: A function. For now can be empty.', () => {
-                example6.initialize(undefined, Subject);
+                example6.initialize();
                 expect(subscribeSpy.calledOnce, 'subscribe not called').equal(true);
                 expect(subscribeSpy.args[0][0], 'First argument is not a function').to.be.a('function');
             });
         });
 
         describe('observable configuration', () => {
-            let debounceTimeStub;
-            let mapStub;
-            let filterStub;
             let subscribeSpy;
+            let pipeStub;
 
             beforeEach(() => {
                 subscribeSpy = sinon.spy();
-                filterStub = sinon.stub().returns({ subscribe: subscribeSpy });
-                mapStub = sinon.stub().returns({ filter: filterStub, subscribe: subscribeSpy });
-                debounceTimeStub = sinon.stub().withArgs(500).returns({ map: mapStub, subscribe: subscribeSpy, filter: filterStub });
-                mapStub = mapStub.returns({ filter: filterStub, debounceTime: debounceTimeStub, subscribe: subscribeSpy });
-                filterStub = filterStub.returns({ map: mapStub, debounceTime: debounceTimeStub, subscribe: subscribeSpy });
+                pipeStub = sinon.stub().returns({ subscribe: subscribeSpy });
 
-                sinon.stub(Observable, 'fromEvent').returns({ debounceTime: debounceTimeStub, subscribe: subscribeSpy, map: mapStub, filter: filterStub });
+                sinon.stub(creators, 'fromEvent').returns({ pipe: pipeStub, subscribe: subscribeSpy });
+                sinon.spy(operators, 'filter');
+                sinon.spy(operators, 'map');
+                sinon.spy(operators, 'debounceTime');
             });
 
             afterEach(() => {
-                Observable.fromEvent.restore();
+                creators.fromEvent.restore();
+                operators.filter.restore();
+                operators.map.restore();
+                operators.debounceTime.restore();
             });
 
-            it('should call Observable.fromEvent with arguments: a HTMLInputElement instance with the class input_6 and the string "keyup" (use getElement function) ', () => {
-                example6.initialize(Observable);
-                expect(Observable.fromEvent.calledOnce, 'fromEvent not called').equal(true);
-                expect(Observable.fromEvent.args[0][0]).to.be.an.instanceOf(window.HTMLInputElement, `FromEvent call: First argument is not a HTMLInputElement instance`);
-                expect(Observable.fromEvent.args[0][0].className).to.equal(`input_6`, `FromEvent call: First argument does not have the class "input_6"`);
-                expect(Observable.fromEvent.args[0][1]).to.equal('keyup', `FromEvent call: Second argument is not "keyup"`);
+            it('should call creators.fromEvent with arguments: a HTMLInputElement instance with the class input_6 and the string "keyup" (use getElement function) ', () => {
+                example6.initialize();
+                expect(creators.fromEvent.calledOnce, 'fromEvent not called').equal(true);
+                expect(creators.fromEvent.args[0][0]).to.be.an.instanceOf(window.HTMLInputElement, `FromEvent call: First argument is not a HTMLInputElement instance`);
+                expect(creators.fromEvent.args[0][0].className).to.equal(`input_6`, `FromEvent call: First argument does not have the class "input_6"`);
+                expect(creators.fromEvent.args[0][1]).to.equal('keyup', `FromEvent call: Second argument is not "keyup"`);
             });
 
             it('should call debounceTime with arguments: 500 and scheduler instance', () => {
-                example6.initialize(Observable, undefined, new VirtualTimeScheduler());
-                expect(debounceTimeStub.calledOnce, 'debounceTime not called').equal(true);
-                expect(debounceTimeStub.args[0][0], 'First argument is not 500').equal(500);
-                expect(debounceTimeStub.args[0][1], 'Second argument is not a scheduler instance').to.be.an.instanceOf(VirtualTimeScheduler);
+                example6.initialize(new VirtualTimeScheduler());
+                expect(operators.debounceTime.calledOnce, 'debounceTime not called').equal(true);
+                expect(operators.debounceTime.args[0][0], 'First argument is not 500').equal(500);
+                expect(operators.debounceTime.args[0][1], 'Second argument is not a scheduler instance').to.be.an.instanceOf(VirtualTimeScheduler);
             });
 
             it('should call map with argument: A function that receives an Event and returns the value from the event (use getValueFromElement function)', (done) => {
-                example6.initialize(Observable);
+                example6.initialize();
 
-                if (!mapStub.calledOnce) {
-                    done(expect(mapStub.calledOnce, 'map not called').equal(true));
+                if (!operators.map.calledOnce) {
+                    done(expect(operators.map.calledOnce, 'map not called').equal(true));
                 }
-                if (typeof mapStub.args[0][0] !== 'function') {
-                    done(expect(mapStub.args[0][0], 'First argument is not a function').to.be.a('function'));
+                if (typeof operators.map.args[0][0] !== 'function') {
+                    done(expect(operators.map.args[0][0], 'First argument is not a function').to.be.a('function'));
                 }
 
                 const inputElement = document.querySelector('.input_6');
                 inputElement.value = 'Dog';
                 const eventListener = function(event) {
-                    const returnedValue = mapStub.args[0][0](event);
+                    const returnedValue = operators.map.args[0][0](event);
                     if (returnedValue !== 'Dog') {
                         done(new Error(`First argument: Function does not return the value from the event. Expecting Dog; Returned ${returnedValue}`));
                     } else {
@@ -113,16 +114,16 @@ describe('Example 6', () => {
             });
 
             it('should call filter with arguments: Function that receives a string and returns true if the lenght of the string is > 2', () => {
-                example6.initialize(Observable);
-                expect(filterStub.calledOnce, 'filter not called').equal(true);
-                expect(filterStub.args[0][0], 'First argument is not a function').to.be.a('function');
-                expect(filterStub.args[0][0]('ME'), 'First argument does not return false if the length of the received string is less than 3').to.equal(false);
-                expect(filterStub.args[0][0](''), 'First argument does not return false if the length of the received string is 0').to.equal(false);
-                expect(filterStub.args[0][0]('Dog'), 'First argument does not return true if the length of the received string is greater than 2').to.equal(true);
+                example6.initialize();
+                expect(operators.filter.calledOnce, 'filter not called').equal(true);
+                expect(operators.filter.args[0][0], 'First argument is not a function').to.be.a('function');
+                expect(operators.filter.args[0][0]('ME'), 'First argument does not return false if the length of the received string is less than 3').to.equal(false);
+                expect(operators.filter.args[0][0](''), 'First argument does not return false if the length of the received string is 0').to.equal(false);
+                expect(operators.filter.args[0][0]('Dog'), 'First argument does not return true if the length of the received string is greater than 2').to.equal(true);
             });
 
             it('should call subscribe with argument: the Subject instance created before', () => {
-                example6.initialize(Observable);
+                example6.initialize();
                 expect(subscribeSpy.calledOnce, 'subscribe not called').equal(true);
                 expect(subscribeSpy.args[0][0], 'First argument is not a Subject instance').to.be.an.instanceOf(Subject);
             });
@@ -150,7 +151,7 @@ describe('Example 6', () => {
                 subscriber.unsubscribe();
             });
 
-            it('should emit the text written in the input with a debounce time of 500ms when its length is greather than 2', () => {
+            it('should emit the text written in the input with a debounce time of 500ms when its length is greater than 2', () => {
                 const [ subscriberLocal, scheduler ] = initializeObservableWithSubscriber(subscriberCallbackSpy);
                 const inputElement = document.querySelector('.input_6');
                 inputElement.value = 'Dog';
@@ -203,7 +204,7 @@ describe('Example 6', () => {
         describe('subscriber behaviour', () => {
             it('should make an Ajax call using Axios with the emitted value and write the result in a text box on keyup (use searchSpecieAndWriteListInElement function)', () => {
                 const scheduler = new VirtualTimeScheduler(undefined, 500);
-                const [ suggestObservable, subject ] = example6.initialize(undefined, undefined, scheduler);
+                example6.initialize(scheduler);
                 const inputElement = document.querySelector('.input_6');
                 const textElement = document.querySelector('.text_6');
                 inputElement.value = 'Dog';
@@ -245,7 +246,7 @@ describe('Example 6', () => {
 
 function initializeObservableWithSubscriber(observer) {
     const scheduler = new VirtualTimeScheduler(undefined, 500);
-    const [ suggestObservable, subject ] = example6.initialize(undefined, undefined, scheduler);
+    const [ suggestObservable, subject ] = example6.initialize(scheduler);
     const subscriber = suggestObservable.subscribe(observer);
 
     return [ subscriber, scheduler, subject ];

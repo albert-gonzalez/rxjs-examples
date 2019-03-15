@@ -1,10 +1,12 @@
-import { Observable as ObservableClass} from 'rxjs';
+import { interval } from "rxjs";
+import { take } from 'rxjs/operators';
+
 import { fillElementWithRandomColor } from '../utils/functions';
 
-export function initialize(Observable = ObservableClass, scheduler = undefined) {
-    const everyTwoSeconds = Observable
-        .interval(2000, scheduler)
-        .take(5);
+export function initialize(scheduler = undefined) {
+    const everyTwoSeconds = interval(2000, scheduler).pipe(
+            take(5)
+        );
 
     const subscriber = everyTwoSeconds.subscribe(() => {
         fillElementWithRandomColor('.rectangle_2');

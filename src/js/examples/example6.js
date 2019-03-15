@@ -1,6 +1,6 @@
-import { Observable as ObservableClass} from 'rxjs';
-import { Subject as SubjectClass} from 'rxjs';
-import axios from 'axios';
+import { Subject, fromEvent } from "rxjs";
+import { debounceTime, map, filter } from 'rxjs/operators';
+
 import {
     addClickEventListenerToElement,
     getElementValueFromEvent,
@@ -9,8 +9,8 @@ import {
     getValueFromElement
 } from '../utils/functions';
 
-export function initialize(Observable = ObservableClass, Subject = SubjectClass, scheduler = undefined) {
-    const fromKeyupEventObservable = configureObservable(Observable, scheduler);
+export function initialize(scheduler = undefined) {
+    const fromKeyupEventObservable = configureObservable(scheduler);
     const fromButtonClickSubject = new Subject();
 
     addClickEventListenerToElement('.button_6', () => {
@@ -28,10 +28,11 @@ export function initialize(Observable = ObservableClass, Subject = SubjectClass,
     return [ fromKeyupEventObservable, fromButtonClickSubject, subscription ];
 }
 
-function configureObservable(Observable, scheduler) {
-    return Observable
-        .fromEvent(getElement('.input_6'), 'keyup')
-        .debounceTime(500, scheduler)
-        .map(((event) => getElementValueFromEvent(event)))
-        .filter((value) => value.length >= 3);
+function configureObservable(scheduler) {
+    return fromEvent(getElement('.input_6'), 'keyup')
+        .pipe(
+            debounceTime(500, scheduler),
+            map(((event) => getElementValueFromEvent(event))),
+            filter((value) => value.length >= 3)
+        );
 }

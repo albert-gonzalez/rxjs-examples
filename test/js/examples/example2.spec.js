@@ -3,6 +3,8 @@ import sinon from 'sinon';
 import * as example2 from '../../../src/js/examples/example2';
 import { JSDOM } from 'jsdom';
 import { VirtualTimeScheduler, Observable, Subscriber } from 'rxjs';
+import * as creators from 'rxjs';
+import * as operators from 'rxjs/operators';
 
 describe('Example 2', () => {
     describe('initialize function', () => {
@@ -21,32 +23,33 @@ describe('Example 2', () => {
 
         describe('Observable configuration', () => {
             let subscribeSpy;
-            let takeStub;
+            let pipeStub;
 
             beforeEach(() => {
                 subscribeSpy = sinon.spy();
-                takeStub = sinon.stub()
-                    .withArgs(5)
-                    .returns({ subscribe: subscribeSpy });
+                pipeStub = sinon.stub().returns({ subscribe: subscribeSpy });
 
-                sinon.stub(Observable, 'interval')
+                sinon.stub(creators, 'interval')
                     .withArgs(2000)
-                    .returns({ take: takeStub, subscribe: subscribeSpy });
+                    .returns({ pipe: pipeStub, subscribe: subscribeSpy });
+
+                sinon.spy(operators, 'take');
             });
 
             afterEach(() => {
-                Observable.interval.restore();
+                creators.interval.restore();
+                operators.take.restore();
             });
 
-            it('should call Observable.interval with arguments: 2000 and a scheduler instance', () => {
-                example2.initialize(Observable, new VirtualTimeScheduler());
-                expect(Observable.interval.calledOnce, 'interval with argument 2000 not called').equal(true);
-                expect(Observable.interval.args[0][1]).to.be.an.instanceOf(VirtualTimeScheduler);
+            it('should call creators.interval with arguments: 2000 and a scheduler instance', () => {
+                example2.initialize(new VirtualTimeScheduler());
+                expect(creators.interval.calledOnce, 'interval with argument 2000 not called').equal(true);
+                expect(creators.interval.args[0][1]).to.be.an.instanceOf(VirtualTimeScheduler);
             });
 
             it('should call take with 5', () => {
                 example2.initialize(Observable);
-                expect(takeStub.calledOnce, 'take with argument 5 not called').equal(true);
+                expect(operators.take.calledOnce, 'take with argument 5 not called').equal(true);
             });
 
             it('should call subscribe with arguments: a function that calls fillElementWithRandomColor function to fill the .rectangle_2 element', () => {
@@ -68,7 +71,7 @@ describe('Example 2', () => {
         describe('observable behaviour', () => {
             it('should emit a value every 2 seconds until it has emitted 5 times', () => {
                 const scheduler = new VirtualTimeScheduler(undefined, 10000);
-                const [ everyTwoSeconds, subscriber ] = example2.initialize(Observable, scheduler);
+                const [ everyTwoSeconds, subscriber ] = example2.initialize(scheduler);
                 const subscriberCallbackSpy = sinon.spy();
 
                 const subscriberForCounting = everyTwoSeconds.subscribe(subscriberCallbackSpy);
@@ -85,7 +88,7 @@ describe('Example 2', () => {
         describe('subscriber behaviour', () => {
             it('should set background of .rectangle_2 with a random rgb value in 2 seconds intervals', () => {
                 const scheduler = new VirtualTimeScheduler(undefined, 10000);
-                const [ everyTwoSeconds, subscriber ] = example2.initialize(Observable, scheduler);
+                const [ everyTwoSeconds, subscriber ] = example2.initialize(scheduler);
                 const rectangleElement = document.querySelector('.rectangle_2');
                 const subscriberSpy = sinon.spy();
 

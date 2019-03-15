@@ -3,6 +3,8 @@ import sinon from 'sinon';
 import * as example3 from '../../../src/js/examples/example3';
 import { JSDOM } from 'jsdom';
 import { VirtualTimeScheduler, Observable, Subscriber } from 'rxjs';
+import * as creators from 'rxjs';
+import * as operators from 'rxjs/operators';
 
 describe('Example 3', () => {
     describe('initialize function', () => {
@@ -21,46 +23,42 @@ describe('Example 3', () => {
 
         describe('observable configuration', () => {
             let subscribeSpy;
-            let takeStub;
-            let scanStub;
+            let pipeStub;
 
             beforeEach(() => {
                 subscribeSpy = sinon.spy();
-                takeStub = sinon.stub()
-                    .withArgs(10)
-                    .returns({ subscribe: subscribeSpy });
+                pipeStub = sinon.stub().returns({ subscribe: subscribeSpy });
 
-                scanStub = sinon.stub()
-                    .returns({ take: takeStub, subscribe: subscribeSpy });
-
-                takeStub = takeStub
-                    .returns({ scan: scanStub, subscribe: subscribeSpy });
-
-                sinon.stub(Observable, 'interval')
+                sinon.stub(creators, 'interval')
                     .withArgs(1000)
-                    .returns({ scan: scanStub, take: takeStub, subscribe: subscribeSpy });
+                    .returns({ pipe: pipeStub, subscribe: subscribeSpy });
+
+                sinon.spy(operators, 'take');
+                sinon.spy(operators, 'scan');
             });
 
             afterEach(() => {
-                Observable.interval.restore();
+                creators.interval.restore();
+                operators.take.restore();
+                operators.scan.restore();
             });
 
-            it('should call Observable.interval with arguments: 1000 and scheduler instance', () => {
-                example3.initialize(Observable, new VirtualTimeScheduler());
-                expect(Observable.interval.calledOnce, 'interval with argument 1000 not called').equal(true);
-                expect(Observable.interval.args[0][1]).to.be.an.instanceOf(VirtualTimeScheduler);
+            it('should call creators.interval with arguments: 1000 and scheduler instance', () => {
+                example3.initialize(new VirtualTimeScheduler());
+                expect(creators.interval.calledOnce, 'interval with argument 1000 not called').equal(true);
+                expect(creators.interval.args[0][1]).to.be.an.instanceOf(VirtualTimeScheduler);
             });
 
             it('should call scan with arguments: a function that receives an accumulator with a fibonacci array and calculates the next array (use calculateNextFibonacciArray)', () => {
                 example3.initialize(Observable);
-                expect(scanStub.calledOnce, 'scan not called').equal(true);
-                expect(scanStub.args[0][0]).to.be.a('function');
-                expect(scanStub.args[0][0]([0,1,1,2])).to.deep.equal([0,1,1,2,3]);
+                expect(operators.scan.calledOnce, 'scan not called').equal(true);
+                expect(operators.scan.args[0][0]).to.be.a('function');
+                expect(operators.scan.args[0][0]([0,1,1,2])).to.deep.equal([0,1,1,2,3]);
             });
 
             it('should call take with 10', () => {
                 example3.initialize(Observable);
-                expect(takeStub.calledOnce, 'take with argument 10 not called').equal(true);
+                expect(operators.take.calledOnce, 'take with argument 10 not called').equal(true);
             });
 
             it('should call subscribe with arguments: a function that receives the current fibonacci array and calls writeArrayInElement', () => {
@@ -81,7 +79,7 @@ describe('Example 3', () => {
         describe('observable behaviour', () => {
             it('should emit 10 times every second and the final emitted value should be an array with the 12 first fibonacci values', () => {
                 const scheduler = new VirtualTimeScheduler(undefined, 10000);
-                const [ fibonacciObservable, subscriber ] = example3.initialize(Observable, scheduler);
+                const [ fibonacciObservable, subscriber ] = example3.initialize(scheduler);
                 const subscriberSpy = sinon.spy();
                 const fibonacciValues = [0, 1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89];
 
@@ -100,7 +98,7 @@ describe('Example 3', () => {
         describe('subscriber behaviour', () => {
             it('should write the 12 first fibonacci values after 10 seconds', () => {
                 const scheduler = new VirtualTimeScheduler(undefined, 10000);
-                const [ fibonacciObservable, subscriber ] = example3.initialize(Observable, scheduler);
+                const [ fibonacciObservable, subscriber ] = example3.initialize(scheduler);
                 const textElement = document.querySelector('.text_3');
                 const fibonacciValues = '0 1 1 2 3 5 8 13 21 34 55 89';
 

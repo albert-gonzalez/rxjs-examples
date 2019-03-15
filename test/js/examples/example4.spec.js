@@ -2,7 +2,9 @@ import { expect } from 'chai';
 import sinon from 'sinon';
 import * as example4 from '../../../src/js/examples/example4';
 import { JSDOM } from 'jsdom';
-import { VirtualTimeScheduler, Subscriber, Observable } from 'rxjs';
+import { Subscriber, Observable } from 'rxjs';
+import * as creators from 'rxjs';
+import * as operators from 'rxjs/operators';
 
 describe('Example 4', () => {
     describe('initialize function', () => {
@@ -20,47 +22,49 @@ describe('Example 4', () => {
         });
 
         describe('observable configuration', () => {
-            let scanStub;
             let subscribeSpy;
+            let pipeStub;
 
             beforeEach(() => {
                 subscribeSpy = sinon.spy();
-                scanStub = sinon.stub().returns({ subscribe: subscribeSpy });
+                pipeStub = sinon.stub().returns({ subscribe: subscribeSpy });
 
-                sinon.stub(Observable, 'fromEvent');
-                sinon.stub(Observable, 'zip').returns({ scan: scanStub, subscribe: subscribeSpy });
+                sinon.stub(creators, 'fromEvent');
+                sinon.stub(creators, 'zip').returns({ pipe: pipeStub, subscribe: subscribeSpy });
+                sinon.spy(operators, 'scan');
             });
 
             afterEach(() => {
-                Observable.fromEvent.restore();
-                Observable.zip.restore();
+                creators.fromEvent.restore();
+                creators.zip.restore();
+                operators.scan.restore();
             });
 
-            it('should call Observable.fromEvent for every button (three times) with arguments: ButtonElement and "click" string (use getElement function)', () => {
+            it('should call creators.fromEvent for every button (three times) with arguments: ButtonElement and "click" string (use getElement function)', () => {
                 example4.initialize(Observable);
-                expect(Observable.fromEvent.calledThrice, 'fromEvent not called three times').equal(true);
+                expect(creators.fromEvent.calledThrice, 'fromEvent not called three times').equal(true);
 
                 expectsForFromEventCall(1, 'First');
                 expectsForFromEventCall(2, 'Second');
                 expectsForFromEventCall(3, 'Third');
             });
 
-            it('should call Observable.zip passing the three button observables created before as arguments', () => {
+            it('should call creators.zip passing the three button observables created before as arguments', () => {
                 example4.initialize(Observable);
-                expect(Observable.zip.calledOnce, 'zip not called').equal(true);
-                expect(Observable.zip.args[0].length, 'zip not called with three arguments').equal(3);
-                expect(Observable.zip.calledWith(...Observable.fromEvent.returnValues), 'zip not called passing three observable as arguments')
+                expect(creators.zip.calledOnce, 'zip not called').equal(true);
+                expect(creators.zip.args[0].length, 'zip not called with three arguments').equal(3);
+                expect(creators.zip.calledWith(...creators.fromEvent.returnValues), 'zip not called passing three observable as arguments')
                         .equal(true);
             });
 
             it('should call scan with two arguments: 1) A function that receives an an accumulator with the current count and increases it by one (use increaseCounter function); 2) The initial value 0 ', () => {
                 example4.initialize(Observable);
-                expect(scanStub.calledOnce, 'scan not called').equal(true);
+                expect(operators.scan.calledOnce, 'scan not called').equal(true);
 
-                expect(scanStub.args[0][0], 'First argument is not a function').to.be.a('function');
-                expect(scanStub.args[0][0](4), 'First argument: The function does not return the accumulated value increased by one').to.equal(5);
+                expect(operators.scan.args[0][0], 'First argument is not a function').to.be.a('function');
+                expect(operators.scan.args[0][0](4), 'First argument: The function does not return the accumulated value increased by one').to.equal(5);
 
-                expect(scanStub.args[0][1], 'Second value is not 0').to.equal(0);
+                expect(operators.scan.args[0][1], 'Second value is not 0').to.equal(0);
             });
 
             it('should call subscribe with argument: A function that receives a value and writes it in a text box (use writeTextInElement function)', () => {
@@ -90,7 +94,7 @@ describe('Example 4', () => {
                 document.querySelector('.button_4_2').dispatchEvent(new window.Event('click'));
                 expect(subscriberCallbackSpy.notCalled, 'observable emitted after clicking the second button').equal(true);
                 document.querySelector('.button_4_3').dispatchEvent(new window.Event('click'));
-                expect(subscriberCallbackSpy.calledWith(1), 'observable not emitted with argument 1 after clicking the thrid button').equal(true);
+                expect(subscriberCallbackSpy.calledWith(1), 'observable not emitted with argument 1 after clicking the third button').equal(true);
 
                 document.querySelector('.button_4_1').dispatchEvent(new window.Event('click'));
                 document.querySelector('.button_4_1').dispatchEvent(new window.Event('click'));
@@ -139,8 +143,8 @@ describe('Example 4', () => {
     });
 
     function expectsForFromEventCall(number, name) {
-        expect(Observable.fromEvent.args[number - 1][0]).to.be.an.instanceOf(window.HTMLButtonElement, `${name} fromEvent call: First argument is not a HTMLButtonElement instance`);
-        expect(Observable.fromEvent.args[number - 1][0].className).to.equal(`button_4_${number}`, `${name} fromEvent call: First argument does not have the class "button${number}"`);
-        expect(Observable.fromEvent.args[number - 1][1]).to.equal('click', `${name} fromEvent call: Second argument is not "click"`);
+        expect(creators.fromEvent.args[number - 1][0]).to.be.an.instanceOf(window.HTMLButtonElement, `${name} fromEvent call: First argument is not a HTMLButtonElement instance`);
+        expect(creators.fromEvent.args[number - 1][0].className).to.equal(`button_4_${number}`, `${name} fromEvent call: First argument does not have the class "button${number}"`);
+        expect(creators.fromEvent.args[number - 1][1]).to.equal('click', `${name} fromEvent call: Second argument is not "click"`);
     }
 });
