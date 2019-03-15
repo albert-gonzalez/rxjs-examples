@@ -41,7 +41,7 @@ describe('Example 2', () => {
         operators.take.restore();
       });
 
-      it('should call creators.interval with arguments: 2000 and a scheduler instance', () => {
+      it('should call interval with arguments: 2000 and a scheduler instance', () => {
         example2.initialize(new VirtualTimeScheduler());
         expect(creators.interval.calledOnce, 'interval with argument 2000 not called').equal(true);
         expect(creators.interval.args[0][1]).to.be.an.instanceOf(VirtualTimeScheduler);

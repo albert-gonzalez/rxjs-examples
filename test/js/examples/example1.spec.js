@@ -38,7 +38,7 @@ describe('Example 1', () => {
         operators.delay.restore();
       });
 
-      it('should call creators.fromEvent with arguments: a HTMLButtonElement instance and the string "click"', () => {
+      it('should call fromEvent with arguments: a HTMLButtonElement instance and the string "click"', () => {
         example1.initialize();
         expect(creators.fromEvent.calledOnce, 'fromEvent not called once').equal(true);
         expect(creators.fromEvent.args[0][0]).to.be.an.instanceOf(window.HTMLButtonElement, `fromEvent call: First argument is not a HTMLButtonElement instance`);
