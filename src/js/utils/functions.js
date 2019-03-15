@@ -89,7 +89,7 @@ export function getElementValueFromEvent (event) {
 export function searchSpecieAndWriteListInElement (query, selector) {
   writeTextInElement('Searching...', selector);
   axios
-    .get(`http://api.gbif.org/v1/species/suggest?q=${query}&limit=5`)
+    .get(`https://api.gbif.org/v1/species/suggest?q=${query}&limit=5`)
     .then((response) => {
       const resultList = response.data.map((result) => {
         return `<li>${result.scientificName} (${result.canonicalName})</li>`;

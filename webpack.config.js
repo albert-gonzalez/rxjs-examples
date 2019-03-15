@@ -38,7 +38,8 @@ module.exports = {
     devServer: {
         publicPath: '/dist/',
         compress: true,
-        port: 9000
+        port: 8080,
+        host: '0.0.0.0'
     },
     devtool: 'source-map'
 };
