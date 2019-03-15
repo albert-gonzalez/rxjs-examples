@@ -73,7 +73,7 @@ describe('Example 6', () => {
         operators.debounceTime.restore();
       });
 
-      it('should call creators.fromEvent with arguments: a HTMLInputElement instance with the class input_6 and the string "keyup" (use getElement function) ', () => {
+      it('should call fromEvent with arguments: a HTMLInputElement instance with the class input_6 and the string "keyup" (use getElement function) ', () => {
         example6.initialize();
         expect(creators.fromEvent.calledOnce, 'fromEvent not called').equal(true);
         expect(creators.fromEvent.args[0][0]).to.be.an.instanceOf(window.HTMLInputElement, `FromEvent call: First argument is not a HTMLInputElement instance`);
