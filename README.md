@@ -1,6 +1,6 @@
-# RxJS v5 Examples
+# RxJS v6 Examples
 
-Six examples of RxJS v5:
+Six examples of RxJS v6:
 
 * [Demo](https://albert-gonzalez.github.io/rxjs-examples/)
 * [Examples Source](https://github.com/albert-gonzalez/rxjs-examples/tree/master/src/js/examples)
