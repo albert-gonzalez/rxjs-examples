@@ -1,9 +1,11 @@
 version: '3'
 services:
   node:
-    image: node:10
+    build:
+      context: .
     volumes:
       - ./:/src
+      - /src/node_modules
     expose:
       - 8080
     ports:
