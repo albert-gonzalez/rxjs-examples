@@ -5,11 +5,10 @@ services:
       context: .
     volumes:
       - ./:/src
-      - /src/node_modules
     expose:
       - 8080
     ports:
       - 8080:8080
     working_dir: /src
-    command: npm start
+    command: bash -c "npm install && npm start"
 
